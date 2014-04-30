@@ -1,7 +1,7 @@
 Title: This is my first page using Pelican
 Date: 2014-04-29 10:01
 Author: flavio
-Category: Work
+Category: Hacks
 Tags: test
 Slug: this-is-a-test
 
@@ -10,12 +10,6 @@ Testing creating pages with Pelican.
 <!--more-->
 
 This is so coooool! Thanks [Dave][].
-
-Docs
-----
-
-[Python 2 Docs][]  
-[Python 3 Docs][]
 
 Tutorials
 ---------
