@@ -145,7 +145,7 @@ Lastly, here is a link to where I keep all the source contents for this Pelican 
 
     :::url
     https://github.com/flavio-fernandes/pelican-blog
-    
+    https://raw.githubusercontent.com/flavio-fernandes/pelican-blog/master/content/hacks/pelican-101.md    
 
 Enjoy!
 
