@@ -2,7 +2,7 @@ Title: ODL module add part 1
 Date: 2014-04-30 12:40
 Author: flavio
 Category: Work
-Tags: test, sdn, opendaylight
+Tags: work, sdn, opendaylight
 Slug: how-to-odl-controller-module-part1
 
 Adding a module to ODL controller part 1.

@@ -2,7 +2,7 @@ Title: My third week at Red Hat
 Date: 2014-04-30 06:01
 Author: flavio
 Category: Viewpoint
-Tags: diary, work
+Tags: diary
 Slug: week-3-at-red-hat
 
 Flavio's experiences on his 3rd week working at Red Hat.
