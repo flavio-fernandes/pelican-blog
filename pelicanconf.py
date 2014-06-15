@@ -48,7 +48,8 @@ TAG_CLOUD_MAX_ITEMS = 20
 
 # Load the Summary Plugin
 PLUGIN_PATH = 'plugins'
-PLUGINS = ['summary']
+PLUGINS = ['summary',
+           'pelican_gist']
 
 # Set the End Marker to
 SUMMARY_END_MARKER = '<!--more-->'
