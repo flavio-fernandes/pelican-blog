@@ -110,6 +110,8 @@ To resolve this issue -- which is only on the control node -- this is what I did
 
 [odl@fedora141 devstack]$ **cd /opt/devstack && cat local.conf**
 
+<button class="toggle-start-hidden">Show/hide</button>
+
 [gist:id=46fbdd6449f2111d1319]
 
 ---
@@ -123,6 +125,8 @@ To resolve this issue -- which is only on the control node -- this is what I did
     # ./stack.sh
 
 [odl@fedora142 devstack]$ **cd /opt/devstack && cat local.conf**
+
+<button class="toggle-start-hidden">Show/hide</button>
 
 [gist:id=bafd436d7a124e9b1671]
 
@@ -138,6 +142,8 @@ To resolve this issue -- which is only on the control node -- this is what I did
 
 [odl@fedora143 devstack]$ **cd /opt/devstack && cat local.conf**
 
+<button class="toggle-start-hidden">Show/hide</button>
+
 [gist:id=eb6863e08fe2d823e861]
 
 ---
@@ -151,6 +157,8 @@ To resolve this issue -- which is only on the control node -- this is what I did
     # ./stack.sh
 
 [odl@fedora144 devstack]$ **cd /opt/devstack && cat local.conf**
+
+<button class="toggle-start-hidden">Show/hide</button>
 
 [gist:id=02fec47445ce37fb3961]
 
@@ -207,6 +215,8 @@ tenants to use the same subnets while being completely isolated from each other.
     https://gist.github.com/2099991f4194f6056d27
 
 ![topology](|filename|/images/openstack-experiment1.1_topo.jpg)
+
+<button class="toggle">Show/hide</button>
 
     cd /opt/devstack
     
@@ -299,17 +309,25 @@ That is so, because we were logged is as pepsi at the time.
 
   A) [control + compute1](https://gist.github.com/2c60a936b832cf829305) -- fedora141 (172.16.150.141)
 
+<button class="toggle-start-hidden">Show/hide</button>
+
 [gist:id=55962c5686f694a3ea75]
 
   B) [compute2](https://gist.github.com/d3ca102a69c8a0972dc8) -- fedora142 (172.16.150.142)
+
+<button class="toggle-start-hidden">Show/hide</button>
 
 [gist:id=32193c891780ca1cf868]
 
   C) [compute3](https://gist.github.com/dcf1686e6d9df5530c16) -- fedora143 (172.16.150.143)
 
+<button class="toggle-start-hidden">Show/hide</button>
+
 [gist:id=eacb03ab3caca6984aa9]
 
   D) [network](https://gist.github.com/874bcd8476f110294108) -- fedora144 (172.16.150.144)
+
+<button class="toggle-start-hidden">Show/hide</button>
 
 [gist:id=7e8404b796427ad0372d]
 
