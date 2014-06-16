@@ -64,7 +64,7 @@ Then, add the following lines to themes/pelican-bootstrap3/templates/base.html
      {% include 'includes/disqus_script.html' %}
      {% include 'includes/ga.html' %}
 
-To use this feature, simply add either of of these a line before the blob you want to hide/show.
+To use this feature, simply add either one of these above the blob you want to hide/show.
 Make sure to have an empty line between this and the blob itself:
 
     <button class="toggle-start-hidden">Show/hide</button>
