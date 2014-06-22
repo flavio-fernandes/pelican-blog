@@ -208,7 +208,7 @@ take extra steps to clean up the state of the node.
 
 It is time to put openstack to work. What we do here is to create 2 tenants: coke and pepsi. For each tenant, we create 2 subnets and a router.
 We also create an external network, which connects both tenant's routers. Lastly, we assign floating ip addresses to each instance, which allows
-them to reach each other by going through the external network. The underlay network is gre, and that --together with ip namespaces-- allows the
+them to reach each other by going through the external network. The overlay network is using gre tunnels, and that --together with ip namespaces-- allows the
 tenants to use the same subnets while being completely isolated from each other.
 
     :::url
