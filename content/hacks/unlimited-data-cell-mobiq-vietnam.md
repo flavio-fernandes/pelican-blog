@@ -9,7 +9,7 @@ Steps for turning metered data in Vietnam's cell into unlimited flat rate.
 
 <!--more-->
 
-While in Vietnam, I kept eating all the credits in the pre-apid card due to
+While in Vietnam, I kept eating all the credits in the pre-paid card due to
 data usage. Turns out there is a neat trick for stopping that. In essence,
 what you can do is to pay a flat rate of 70k points and have unlimited data
 for a month.
