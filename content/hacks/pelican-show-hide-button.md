@@ -5,7 +5,7 @@ Category: Hacks
 Tags: tools
 Slug: pelican-show-hide-button
 
-Easy button for collapsing blobs of data in a pelican page
+Easy button for collapsing blobs of data in a pelican page.
 
 <!--more-->
 
