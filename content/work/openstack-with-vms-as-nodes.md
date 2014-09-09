@@ -83,7 +83,7 @@ The nics eth0, eth1 and eth2 are isolated into their own bridge instance. eth1 a
     ## Installing wireshark (and X11 support) in Fedora
     
     yum install -y wireshark xorg-x11-xauth xorg-x11-fonts-* xorg-x11-utils wireshark-gnome
-    sed -i 's/#X11Forwarding\ no/X11Forwarding\ yes/'  /etc/ssh/sshd_config
+    sed -i -e 's/#.*X11Forwarding\ no/X11Forwarding\ yes/'  /etc/ssh/sshd_config
     systemctl restart sshd.service
     
     # Link root’s .XAutority to odl’s
