@@ -54,7 +54,7 @@ See [wiki for better details on installing][5]
 ### 6) Generate integration test for sonar data from OVSDB project
 
 In order to run integration test coverage, you will need a running instance of OVS,
-so OVSDB can talk to. See [this link][6] and [this link][7] for diffent methods of running OVS.
+so OVSDB can talk to. See [this link][6] and [this link][7] for different methods of running OVS.
 
 Once OVS is running, do this from the integration directory in ovsdb.git
 
