@@ -12,10 +12,10 @@ FTP_HOST=localhost
 FTP_USER=anonymous
 FTP_TARGET_DIR=/
 
-SSH_HOST=potofjoy.com
+SSH_HOST=flaviof.com
 SSH_PORT=22
 SSH_USER=gute
-SSH_TARGET_DIR=/home/gute/potofjoy.com/flavioBlog
+SSH_TARGET_DIR=/home/gute/flaviof.com/blog
 
 S3_BUCKET=my_s3_bucket
 
