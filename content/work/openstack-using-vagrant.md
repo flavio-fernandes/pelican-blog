@@ -374,7 +374,7 @@ These are the steps to get ping going from vm3 of tenant 2 to [floating ip of] v
 
 [gist:id=cc9b2770ed619589bee5]
 
-Looking at the wireshark packets, after decoding the VXLAN headers. Play close attention
+Looking at the wireshark packets, after decoding the VXLAN headers. Pay close attention
 to the VNI values to keep track of the tenant boundaries.
 <button class="toggle">Show/hide</button>
 
