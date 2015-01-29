@@ -2,7 +2,7 @@ Title: Use .ssh/authorized_keys to block inadvertent username
 Date: 2015-01-22 10:10
 Author: flavio
 Category: Hacks
-Tags: config, ssh
+Tags: tools
 Slug: login-as-user-bla
 
 Nice hack in .ssh/authorized_keys to stop unwanted username from logging in
