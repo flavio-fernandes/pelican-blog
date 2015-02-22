@@ -21,7 +21,7 @@ fun it would be to dash through it and make an explosion of white powder, I poin
 
 The impact was nothing I predicted. Instead of dispersing the mound, my shin felt the reality of what the mound really
 was: a block of super packed snow, with the density close to a solid block of ice. It felt like hitting a bowling ball.
-As my leg tried to cope with he impact, my balance control gave in. It all happened very fast, but within a second I
+As my leg tried to cope with the impact, my balance control gave in. It all happened very fast, but within a second I
 remember violently hitting my right knee on the ground and losing the skis and poles while rolling.
 
 At that point, I was already looking forward to a quiet sit down, waiting for the pain to succumb. Only then, I could put
