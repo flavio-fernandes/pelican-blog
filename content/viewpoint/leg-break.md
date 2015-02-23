@@ -39,7 +39,7 @@ something to do with this, but I narrowed down to 3 items that would have made f
 - fluffy looking snow is to be taken seriously;
 - knee pads are not just for snowboarding.
 
-As I write this -- sitting on the sofa with new screws in the leg -- I can't help but feeling thankful to all
+As I write this -- sitting on the sofa with new screws in the leg -- I can't help but feeling thankful for all
 the patience and support I get from the fam. Modern medicine has definitely made this easier too. It was a really
 short season; I can't wait to be out skiing next year.
 
