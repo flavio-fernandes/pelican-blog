@@ -151,8 +151,8 @@ At this point, once you get everything to look the way you want, run the followi
     # cd /root/ && ./openstack_part0.sh
     # cd /root/ && ./openstack_part1.sh
     # su - vagrant
-    $ cd /home/vagrant && openstack_part2.sh
-    $ cd /home/vagrant && openstack_part3.sh
+    $ cd /home/vagrant && ./openstack_part2.sh
+    $ cd /home/vagrant && ./openstack_part3.sh
 
 A brief description of what each bash script does:
 
