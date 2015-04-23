@@ -169,12 +169,12 @@ This step takes 23 minutes on my laptop.<button class="toggle-start-hidden">Show
 **openstack_part2.sh**: deploy tenant vms for tenant1
 <button class="toggle">Show/hide</button>
 
-[gist:id=85c044b52de65f67ba00]
+[gist:id=8c9524d37f5c71253bbf]
 
 **openstack_part3.sh**: deploy tenant vms for tenant2
 <button class="toggle-start-hidden">Show/hide</button>
 
-[gist:id=efd152010ba873cd0309]
+[gist:id=6f766e999c6d4a612fa8]
 
 <span id=tenantTopology />
 ## Tenants Topology ##
