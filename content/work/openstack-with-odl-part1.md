@@ -36,13 +36,15 @@ To help folks running [Vmware fusion][vmfusion], I've already added hooks in the
 Start off by cloning this github project. Please note we will be using a specific branch to pick up some
 scripts and config tailored to this tutorial:
 
-    git clone -b basicL2 https://github.com/flavio-fernandes/devstack-nodes.git odldemo
-    cd odldemo
+    :::bash
+    $ git clone -b blogDemo https://github.com/flavio-fernandes/devstack-nodes.git odldemo
+    $ cd odldemo
 
-The Vagrantfile is [here][basicL2Vagrant]. That uses puppet standalone mode, which uses [hosts.json][hostsJson],
+The Vagrantfile is [here][blogDemoVagrant]. That uses puppet standalone mode, which uses [hosts.json][hostsJson],
 located under puppet/hieradata. Feel free to change any values to make sense to
 your system config. After that, all you need to do is:
 
+    :::bash
     $ time vagrant up  ;  # this can take a little over 18 minutes on my macbook pro (Late 2013) ...
 
 <span id=goDevstack />
@@ -52,19 +54,24 @@ In order to configure Openstack, the Vagrant provisioning will pull in the lates
 Kilo release -- and add a local.conf file for each vm. That will be located at /home/vagrant/devstack directory.
 A few highlights on the local.conf is in order. 
 
-First, you can notice that all vms are using the [OpenDaylight ML2 MechanismDriver][networkingOld] as plugin.
+First, you can notice that all vms are using the [OpenDaylight ML2 MechanismDriver][networkingOdl] as plugin.
 That is accomplished by adding **enable_plugin networking-odl** as shown in local.conf for 
 [control][localConfControl] and [compute][localConfCompute] nodes. More details on using this plugin is
-available [here][networkingOldDevstack].
+available [here][networkingOdlDevstackReadme]. Note that in the *enable_plugin* syntax you can specify different git repo
+than the [official][originalNetworkingOdlUrl] one, as well as any branch. If no branch is specified, it will use master.
+For sake of this blog, I'm using my forked [Github][github] repo, branch *helium*, which contains some specific [tweaks][networkingOdlTweaks]
+needed.
 
 Secondly, since [ODL][odl] is running in the *allinone* mode and that is the default, there is no need to have it explicitly
 mentioned. Otherwise, that would require the **ODL_MODE** to be [provided][odlModeExternal], as described [here][odlMode].
 Together with that, note that the [ip address used to describe where ODL is][hostsJson] has the same value as the
-control node.
+control node. When launching ODL externally, make sure to load the following karaf feature: ***feature:install odl-ovsdb-openstack***.
+You can do that at the Karaf prompt or in the file *etc/org.apache.karaf.features.cfg*. The ODL provisioning script for *allinone*
+does that as shown [here][fiooo].
 
 Another attribute in local.conf to point out is the **ODL_PORT**. When ODL is co-located with
 control, there is a potential for the northbound neutron server in ODL to conflict with Swift. However, ODL will
-use port 8080 by default and networking-odl (ie the ml2) needs to be aware of that. This is particularly important
+use port 8080 by default and networking-odl (i.e. the ml2) needs to be aware of that. This is particularly important
 when we are not using the *allinone* mode. Since in this experiment we have Swift disabled, we can let co-located
 ODL 'own' 8080.
 
@@ -75,6 +82,7 @@ the Lithium roadmap.
 
 At this point, once you get everything to look the way you want, run the following scripts:
 
+    :::bash
     $ vagrant ssh devstack-control
     $ cd devstack/ && ./stack.sh
 
@@ -86,6 +94,12 @@ At this point, once you get everything to look the way you want, run the followi
 **Note:** devstack is not the most stable environment, due to its high level of activity. If you hit an issue
 with stacking, use *./unstack.sh* and/or *vagrant reload*; and start stack.sh over. Odds are you will
 not need that, tho.
+
+Once that is done, you can 'lock down' the stack repo used by changing the following values in local.conf (on both
+control and compute nodes):
+
+    OFFLINE=True
+    RECLONE=no
 
 <span id=tenantTopology />
 ## Tenants Topology ##
@@ -99,6 +113,7 @@ Since part of the stacking involves getting OVS in each of the nodes connecting 
 you should be able to see that OVS is connected and bridge br-int was created. That must be the case
 before we do any further openstack config:
 
+    :::bash
     vagrant@devstack-control:~/devstack$ sudo ovs-vsctl show
     39745b5b-2ff9-416b-ab3e-f1b81fd29fd7
         Manager "tcp:192.168.50.20:6640"
@@ -130,8 +145,9 @@ pipeline tables.
 <span id=pipeline />
 ## ODL OVSDB Net-Virt Pipelining ##
 
-Looking at the opelflow 1.3 table in br-int, this is what you will observe on all nodes:
+Looking at the openflow 1.3 table in br-int, this is what you will observe on all nodes:
 
+    :::bash
     $ sudo ovs-ofctl -O OpenFlow13 dump-flows br-int
     OFPST_FLOW reply (OF1.3) (xid=0x2):
      cookie=0x0, duration=8558.311s, table=0, n_packets=0, n_bytes=0, priority=0 actions=goto_table:20
@@ -151,6 +167,7 @@ The reason for these rules is to provide an internal abstraction to the net-virt
 different services can co-exist in br-int. The code that triggers these rules [lives here][pipelineServices] and
 is identified in the [Service enumeration][serviceEnum]:
 
+    :::java
     package org.opendaylight.ovsdb.openstack.netvirt.providers.openflow13;
 
     public enum Service {
@@ -187,18 +204,18 @@ need arrives. The placeholder for director is shown as table 10.
 Now, let's get a little more real by creating a simple config in openstack. For that, we will create tenant1,
 add a network and subnet. Then, we will add 2 tenant1 vms. Just as shown in [picture above](#tenantTopology).
 
-    vagrant@devstack-control:~/devstack$ export TNT_ID=1 ; \
-        source openrc user${TNT_ID} tenant${TNT_ID} ; export OS_PASSWORD=user${TNT_ID} ; \
-        /vagrant/puppet/scripts/createTenantAndVms.sh
+    :::bash
+    vagrant@devstack-control:~/devstack$ /vagrant/puppet/scripts/createTenantAndVms.sh
 
 You can see the contents of [createTenantAndVms.sh here][createTenantAndVms].
 <button class="toggle-start-hidden">Show/hide</button>
 
-[gist:id=6ff5744a822ad2df55a0]
+[gist:id=36b661db29c59bb54845]
 
 Some interesting commands to see what was created is shown here:
 <button class="toggle-start-hidden">Show/hide</button>
 
+    :::bash
     vagrant@devstack-control:~/devstack$ source openrc admin admin
     vagrant@devstack-control:~/devstack$ nova list --all
 
@@ -237,8 +254,9 @@ Some interesting commands to see what was created is shown here:
 Looking closely at the info obtained above, you can draw a pretty good picture of the macs and their location. This is a brief
 summary on that:
 
+    :::text
     Tenant 1's id: 097f695f8e214745984750ee7400814f
-    Network segmentation ID: 1001
+    Network segmentation ID: 1001 (0x3e9)
     MAC_1: fa:16:3e:46:64:2b IP: 2.0.0.1 Instance: - Host: devstack-control   Desc: <DHCPd> 
     MAC_2: fa:16:3e:37:be:fa IP: 2.0.0.2 Instance: 1 Host: devstack-control   Desc: 1_vm1
     MAC_3: fa:16:3e:46:db:d5 IP: 2.0.0.3 Instance: 2 Host: devstack-compute-1 Desc: 1_vm2
@@ -247,6 +265,7 @@ We can -- of course -- play a bit to verify that 1_vm1 can reach 1_vm2 and the m
 we saw from the openstack commands:
 <button class="toggle-start-hidden">Show/hide</button>
 
+    :::bash
     vagrant@devstack-control:~/devstack$ sudo ip netns exec $(sudo ip netns | head -1) bash
     root@devstack-control:~/devstack# ip a s
     1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default
@@ -293,6 +312,7 @@ Now, to the nuts and bolts of the plumbing: OVS ports/interfaces. In the control
 we have the following:
 <button class="toggle-start-hidden">Show/hide</button>
 
+    :::bash
     vagrant@devstack-control:~/devstack$ sudo ovs-vsctl show
     39745b5b-2ff9-416b-ab3e-f1b81fd29fd7
         Manager "tcp:192.168.50.20:6640"
@@ -339,6 +359,7 @@ we have the following:
 In the compute-1 node we have the following:
 <button class="toggle-start-hidden">Show/hide</button>
 
+    :::bash
     vagrant@devstack-compute-1:~/devstack$ sudo ovs-vsctl show
     6a894e1d-05d8-49be-8359-a09978281b36
         Manager "tcp:192.168.50.20:6640"
@@ -378,6 +399,7 @@ interface and openstack's tenant vms; as well as how control and compute-1 talk 
 attribute that links the two worlds is the **iface-id** stored in interface's **external_ids**. That is actually
 the id of the Neutron port. This is a brief summary on that:
 
+    :::text
     control  OF port: 1 --> MAC: fa:16:3e:46:64:2b IP: 2.0.0.1 Desc: <DHCPd> ExtrnId: 085eeb79-ac3e-4e61-a0ae-91b30cc48fbd
     control  OF port: 2 --> MAC: 1e:ac:ec:85:4b:a1 IP: -       Desc: vxlan-192.168.50.21 (connects control to compute-1)
     control  OF port: 3 --> MAC: fa:16:3e:37:be:fa IP: 2.0.0.2 Desc: 1_vm1   ExtrnId: 3d803796-dc00-4f81-872e-dce10947f478
@@ -404,6 +426,7 @@ Here is what the openflow rules look like, from the compute-1 node:
 
 [gist:id=9e6fd35a221198a92724]
 
+<span id=classifier_table />
 ### Notes on Table 0 (aka Classifier) ###
 
 This table is where is all begins. In here, we are looking for 3 potential cases:
@@ -441,6 +464,9 @@ By elimination you can see that we will only pay attention to these LLDP packets
 That is the intended behavior.
 (Line 9 in control node; Line 7 in compute-1)
 
+The code used to populate this table is located [here][codeClassifier].
+
+<span id=l2_fwd_table />
 ### Notes on Table 110 (aka L2_Fwd) ###
 
 By the time the flow logic reaches this table, all that is left to do is to either:
@@ -475,6 +501,8 @@ is very okay -- yet potentially confusing to operators -- to re-use macs across 
 ports used by dhcp servers are also taken into consideration by this logic.
 (Lines 23 thru 25 in control node; Line 21 thru 23 in compute-1)
 
+The code used to populate this table is located [here][codeL2Fwd].
+
 <span id=makeMoreTenants />
 ## Create More Tenants ##
 
@@ -484,9 +512,11 @@ Then, using the commands above, have a look on how the new tenant vms affect the
 Remember to pay close **attention to tun_id**.
 I urge you to try it out and let me know how it goes!
 
+    :::bash
     vagrant@devstack-control:~/devstack$ export TNT_ID=2 ; export VM_COUNT=5 ; \
-        source openrc user${TNT_ID} tenant${TNT_ID} ; export OS_PASSWORD=user${TNT_ID} ; \
-        /vagrant/puppet/scripts/createTenantAndVms.sh ; \
+        /vagrant/puppet/scripts/createTenantAndVms.sh
+
+    vagrant@devstack-control:~/devstack$ source openrc user${TNT_ID} tenant${TNT_ID} ; export OS_PASSWORD=user${TNT_ID} ; \
         neutron port-list
 
 Next up -- as mentioned before -- I will show you how we use this pipeline framework to give us L3 functionality. Stay tuned. ;)
@@ -502,19 +532,24 @@ Some related links you may find interesting:
   [vbox]: https://www.virtualbox.org/ "Get Virtual Box"
   [bento]: https://github.com/chef/bento "Bento project"
   [vmfusion]: http://www.vmware.com/products/fusion/ "VMware Fusion"
-  [networkingOld]: https://github.com/stackforge/networking-odl "OpenDaylight ML2 MechanismDriver"
-  [localConfControl]: https://github.com/flavio-fernandes/devstack-nodes/blob/basicL2/puppet/templates/control.local.conf.erb#L52 "local.conf for control node"
-  [localConfCompute]: https://github.com/flavio-fernandes/devstack-nodes/blob/basicL2/puppet/templates/compute.local.conf.erb#L40 "local.conf for compute node"
-  [networkingOldDevstack]: https://github.com/stackforge/networking-odl/blob/master/devstack/README.rst "networking-odl devstack"
-  [odlModeExternal]: https://github.com/flavio-fernandes/devstack-nodes/blob/basicL2/puppet/templates/control.local.conf.erb#L58 "odl mode external placeholder"
+  [networkingOdl]: https://github.com/stackforge/networking-odl "OpenDaylight ML2 MechanismDriver"
+  [localConfControl]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L53 "local.conf for control node"
+  [localConfCompute]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/compute.local.conf.erb#L41 "local.conf for compute node"
+  [originalNetworkingOdlUrl]: https://review.openstack.org/gitweb?p=stackforge/networking-odl.git "networking-odl"
+  [github]: http://github.com "github"
+  [networkingOdlTweaks]: https://github.com/flavio-fernandes/networking-odl/commits/helium "forked networking-odl tweaks"
+  [networkingOdlDevstackReadme]: https://github.com/stackforge/networking-odl/blob/master/devstack/README.rst "networking-odl devstack readme"
+  [odlModeExternal]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L59 "odl mode external placeholder"
   [odlMode]: https://github.com/stackforge/networking-odl/blob/master/devstack/settings "odl mode variable"
-  [hostsJson]: https://github.com/flavio-fernandes/devstack-nodes/blob/basicL2/puppet/hieradata/hosts.json "hosts.json"
-  [basicL2Vagrant]: https://github.com/flavio-fernandes/devstack-nodes/blob/basicL2/Vagrantfile "Vagrant used by basic L2 demo"
+  [fiooo]: https://github.com/flavio-fernandes/networking-odl/blob/helium/devstack/plugin.sh#L132 "feature:install odl-ovsdb-openstack"
+  [hostsJson]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/hieradata/hosts.json "hosts.json"
+  [blogDemoVagrant]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/Vagrantfile "Vagrant used by basic L2 demo"
   [pipelineServices]: https://github.com/opendaylight/ovsdb/tree/master/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services "Pipeline Code"
   [serviceEnum]: https://github.com/opendaylight/ovsdb/blob/master/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/Service.java "Pipeline Service Enum"
   [examplePipeline]: https://docs.google.com/drawings/d/1ax9iYnVbaF49DZqrBihnOOHFjeOkMmdo779zO9xSdo0/edit?usp=sharing "Pipeline Example"
   [directorService]: https://docs.google.com/drawings/d/1TCmIeICTePmnfZuJLeSr1NYmfZMrql5utzAhhOgJvd4/edit?usp=sharing "Pipeline Director Service"
-  [createTenantAndVms]: https://github.com/flavio-fernandes/devstack-nodes/blob/basicL2/puppet/scripts/createTenantAndVms.sh "createTenantAndVms.sh"
+  [createTenantAndVms]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/scripts/createTenantAndVms.sh "createTenantAndVms.sh"
   [odl]: http://www.opendaylight.org/ "Opendaylight"
-
+  [codeClassifier]: https://github.com/opendaylight/ovsdb/blob/master/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/ClassifierService.java "Classifier Service"
+  [codeL2Fwd]: https://github.com/opendaylight/ovsdb/blob/master/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/L2ForwardingService.java "L2 Forwarding Service"
 
