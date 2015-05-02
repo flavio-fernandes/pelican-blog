@@ -24,7 +24,7 @@ LINKS =  (('Delicious Links', 'http://delicious.com/gute'),
           ('Open Day Light', 'http://www.opendaylight.org/'))
 
 # Social widget
-SOCIAL = (('Twitter', 'http://twitter.com/guteusa'),
+SOCIAL = (('Twitter', 'http://twitter.com/flaviof321'),
           ('LinkedIn', 'https://www.linkedin.com/pub/flavio-fernandes/3/110/a26'),
           ('GitHub', 'http://github.com/flavio-fernandes'))
 

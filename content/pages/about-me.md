@@ -10,4 +10,4 @@ About Flavio...
 Links that can help on that: [LinkedIn][1] [Twitter ][2].
 
  [1]: https://www.linkedin.com/pub/flavio-fernandes/3/110/a26 "LinkedIn"
- [2]: http://www.twitter.com/guteusa
+ [2]: http://www.twitter.com/flaviof321
