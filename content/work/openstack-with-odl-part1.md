@@ -440,7 +440,7 @@ Knowing the openflow (OF) port and the source Mac, this rule will set the tun_id
 move onto the next table in the pipeline.
 (Lines 3 and 4 in control; Line 3 in compute-1)
 
-Conversely, if unexpected source Mac arrives in the configured OF port, this table has explicitly rules to drop the packet.
+Conversely, if unexpected source Mac arrives in the configured OF port, this table has explicit rules to drop the packet.
 (Lines 6 and 7 in control; Line 5 in compute-1)
 
 It is possible you may have not noticed this, but tun_id is the exact value as the segmentation_id used in openstack. In our example
