@@ -411,6 +411,7 @@ This is where interesting things happen in order to handle northbound/southbound
 in this page, I'll postpone talking about it for now. Stay tuned for part 3 of this blog.
 For the time being, look at [this link][codeNatIn] and [here][codeNatOut] for the implementation on how the rule looks like.
 
+<span id=distributed_virtual_routing />
 #### Notes on Table 60 (aka Distributed Virtual Routing) ####
 
 At this level, we are building the rules that allow for packets to hop across segmentation ids. In other words, we match
@@ -450,6 +451,7 @@ ping, as shown.
 
 The code used to populate this table is located [here][codeVirtualRouting].
 
+<span id=l3_fwd_table />
 #### Notes on Table 70 (aka L3_Fwd) ####
 
 This table can be thought as the 'second half' of table 60. Its purpose in life is to finish the L2 assembling
