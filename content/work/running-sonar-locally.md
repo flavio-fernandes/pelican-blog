@@ -1,5 +1,5 @@
 Title: Installing and running Sonar locally
-Date: 2014-10-11 14:44
+Date: 2015-06-29 15:59
 Author: flavio
 Category: Work
 Tags: work, tools, opendaylight
@@ -18,12 +18,12 @@ blurb on the details for doing that. In this particular case, I'm using
 
 Go to: [http://www.sonarqube.org/downloads/][3]
 
-    wget --quiet http://dist.sonar.codehaus.org/sonarqube-4.5.1.zip
-    unzip sonarqube-4.5.1.zip > /dev/null
+    wget --quiet http://downloads.sonarsource.com/sonarqube/sonarqube-5.1.1.zip
+    unzip sonarqube-5.1.1.zip > /dev/null
 
 ### 2) Start Sonar
 
-    MY_OS='macosx-universal-64' ; ./sonarqube-4.5.1/bin/${MY_OS}/sonar.sh start
+    MY_OS='macosx-universal-64' ; ./sonarqube-5.1.1/bin/${MY_OS}/sonar.sh start
 
 Using your browser, go to [http://localhost:9000][4] and login
 
@@ -34,11 +34,12 @@ Using your browser, go to [http://localhost:9000][4] and login
 See [wiki for better details on installing][5]
 
     git clone https://git.opendaylight.org/gerrit/ovsdb ovsdb.git
+
+### 4) Generate unit test for sonar data from OVSDB project. Note we bulid twice, once to grab
+all needed dependencies and again to build against sonar.
+
     cd ovsdb.git && mvn clean install -DskipTests
-
-### 4) Generate unit test for sonar data from OVSDB project
-
-    mvn verify -Pcoverage -Pjenkins -Dsonar.host.url=http://localhost:9000 sonar:sonar
+    mvn verify -Pcoverage,jenkins -Dsonar.host.url=http://localhost:9000 sonar:sonar
 
 <span id=add_unit_test_coverage_widget_in_sonar />
 ### 5) Add Unit Test Coverage widget in Sonar
@@ -58,9 +59,13 @@ so OVSDB can talk to. See [this link][6] and [this link][7] for different method
 
 Once OVS is running, do this from the integration directory in ovsdb.git
 
-    cd ./integration ; \
-    mvn verify -Pintegrationtest -Pcoverage -Pjenkins -Dsonar.host.url=http://localhost:9000 \
-    -Dovsdbserver.ipaddress=${OVS_IP} -Dovsdbserver.port=6640 sonar:sonar
+    cd ./integrationtest && \
+    mvn verify -Pintegrationtest,coverage,jenkins -Dsonar.host.url=http://localhost:9000 \
+    -Dovsdbserver.ipaddress=${OVS_IP} -Dovsdbserver.port=6640 -nsu -o sonar:sonar 
+
+    cd ../southbound/southbound-it && \
+    mvn verify -Pintegrationtest,coverage,jenkins -Dsonar.host.url=http://localhost:9000 \
+    -Dovsdbserver.ipaddress=${OVS_IP} -Dovsdbserver.port=6640 -nsu -o sonar:sonar 
 
 ### 7) Add Integration test Coverage widget in Sonar
 
