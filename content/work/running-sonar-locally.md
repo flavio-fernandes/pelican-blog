@@ -35,8 +35,8 @@ See [wiki for better details on installing][5]
 
     git clone https://git.opendaylight.org/gerrit/ovsdb ovsdb.git
 
-### 4) Generate unit test for sonar data from OVSDB project. Note we bulid twice, once to grab
-all needed dependencies and again to build against sonar.
+### 4) Generate unit test for sonar data from OVSDB project.
+Note we bulid twice, once to grab all needed dependencies and again to build against sonar.
 
     cd ovsdb.git && mvn clean install -DskipTests
     mvn verify -Pcoverage,jenkins -Dsonar.host.url=http://localhost:9000 sonar:sonar
