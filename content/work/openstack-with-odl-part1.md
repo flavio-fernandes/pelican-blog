@@ -50,7 +50,7 @@ your system config. After that, all you need to do is:
 <span id=goDevstack />
 ## Go Devstack! ##
 
-In order to configure Openstack, the Vagrant provisioning will pull in the latest devstack -- currently the
+In order to configure Openstack, the Vagrant provisioning will pull in devstack --
 Kilo release -- and add a local.conf file for each vm. That will be located at /home/vagrant/devstack directory.
 A few highlights on the local.conf is in order. 
 
@@ -59,7 +59,7 @@ That is accomplished by adding **enable_plugin networking-odl** as shown in loca
 [control][localConfControl] and [compute][localConfCompute] nodes. More details on using this plugin is
 available [here][networkingOdlDevstackReadme]. Note that in the *enable_plugin* syntax you can specify different git repo
 than the [official][originalNetworkingOdlUrl] one, as well as any branch. If no branch is specified, it will use master.
-For sake of this blog, I'm using my forked [Github][github] repo, branch *helium*, which contains some specific [tweaks][networkingOdlTweaks]
+For sake of this blog, I'm using my forked [Github][github] repo, branch *heliumkilo*, which contains some specific [tweaks][networkingOdlTweaks]
 needed.
 
 Secondly, since [ODL][odl] is running in the *allinone* mode and that is the default, there is no need to have it explicitly
@@ -111,7 +111,7 @@ Here is the very simple network topology of the openstack nodes we will be using
 
 Since part of the stacking involves getting OVS in each of the nodes connecting to ODL as manager,
 you should be able to see that OVS is connected and bridge br-int was created. That must be the case
-before we do any further openstack config:
+before we do any further openstack config, on both control and compute nodes:
 
     :::bash
     vagrant@devstack-control:~/devstack$ sudo ovs-vsctl show
@@ -125,7 +125,7 @@ before we do any further openstack config:
             Port br-int
                 Interface br-int
                     type: internal
-        ovs_version: "2.3.0"
+        ovs_version: "2.3.2"
 
     vagrant@devstack-compute-1:~/devstack$ sudo ovs-vsctl show
     6a894e1d-05d8-49be-8359-a09978281b36
@@ -137,7 +137,7 @@ before we do any further openstack config:
             fail_mode: secure
             Port br-int
                 Interface br-int
-        ovs_version: "2.3.0"
+        ovs_version: "2.3.2"
 
 Another critical piece in ODL that takes place even before we do any config in openstack is the
 pipeline tables.
@@ -210,7 +210,7 @@ add a network and subnet. Then, we will add 2 tenant1 vms. Just as shown in [pic
 You can see the contents of [createTenantAndVms.sh here][createTenantAndVms].
 <button class="toggle-start-hidden">Show/hide</button>
 
-[gist:id=36b661db29c59bb54845]
+[gist:id=d72d01032c09ae54f1e4]
 
 Some interesting commands to see what was created is shown here:
 <button class="toggle-start-hidden">Show/hide</button>
@@ -333,7 +333,7 @@ we have the following:
                     type: internal
             Port "tap3d803796-dc"
                 Interface "tap3d803796-dc"
-        ovs_version: "2.3.0"
+        ovs_version: "2.3.2"
     
     vagrant@devstack-control:~/devstack$ sudo ovs-vsctl list Interface | grep -E '^name|^ofport |^mac_in_use|^external_id'
     external_ids        : {}
@@ -376,7 +376,7 @@ In the compute-1 node we have the following:
                     options: {key=flow, local_ip="192.168.50.21", remote_ip="192.168.50.20"}
             Port "tap4c6f3e8f-02"
                 Interface "tap4c6f3e8f-02"
-        ovs_version: "2.3.0"
+        ovs_version: "2.3.2"
     
     vagrant@devstack-compute-1:~/devstack$ sudo ovs-vsctl list Interface | grep -E '^name|^ofport |^mac_in_use|^external_id'
     external_ids        : {attached-mac="fa:16:3e:46:db:d5", iface-id="4c6f3e8f-02f8-4f7e-bc6b-10ff2b95d612", iface-status=active, vm-id="c6bde77a-b196-4e6f-a2eb-23da250fe146"}
@@ -532,24 +532,24 @@ Some related links you may find interesting:
   [vbox]: https://www.virtualbox.org/ "Get Virtual Box"
   [bento]: https://github.com/chef/bento "Bento project"
   [vmfusion]: http://www.vmware.com/products/fusion/ "VMware Fusion"
-  [networkingOdl]: https://github.com/stackforge/networking-odl "OpenDaylight ML2 MechanismDriver"
-  [localConfControl]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L53 "local.conf for control node"
-  [localConfCompute]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/compute.local.conf.erb#L41 "local.conf for compute node"
-  [originalNetworkingOdlUrl]: https://review.openstack.org/gitweb?p=stackforge/networking-odl.git "networking-odl"
+  [networkingOdl]: https://github.com/openstack/networking-odl "OpenDaylight ML2 MechanismDriver"
+  [localConfControl]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L52 "local.conf for control node"
+  [localConfCompute]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/compute.local.conf.erb#L37 "local.conf for compute node"
+  [originalNetworkingOdlUrl]: https://review.openstack.org/gitweb?p=openstack/networking-odl.git "networking-odl"
   [github]: http://github.com "github"
-  [networkingOdlTweaks]: https://github.com/flavio-fernandes/networking-odl/commits/helium "forked networking-odl tweaks"
-  [networkingOdlDevstackReadme]: https://github.com/stackforge/networking-odl/blob/master/devstack/README.rst "networking-odl devstack readme"
-  [odlModeExternal]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L69 "odl mode external placeholder"
-  [odlMode]: https://github.com/stackforge/networking-odl/blob/master/devstack/settings "odl mode variable"
-  [fiooo]: https://github.com/flavio-fernandes/networking-odl/blob/helium/devstack/plugin.sh#L128 "feature:install odl-ovsdb-openstack"
+  [networkingOdlTweaks]: https://github.com/flavio-fernandes/networking-odl/commits/heliumkilo "forked networking-odl tweaks"
+  [networkingOdlDevstackReadme]: https://github.com/flavio-fernandes/networking-odl/blob/heliumkilo/devstack/README.rst "networking-odl devstack readme"
+  [odlModeExternal]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L73 "odl mode external placeholder"
+  [odlMode]: https://github.com/flavio-fernandes/networking-odl/blob/heliumkilo/devstack/settings#L27 "odl mode variable"
+  [fiooo]: https://github.com/flavio-fernandes/networking-odl/blob/heliumkilo/devstack/plugin.sh#L92 "feature:install odl-ovsdb-openstack"
   [hostsJson]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/hieradata/hosts.json "hosts.json"
   [blogDemoVagrant]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/Vagrantfile "Vagrant used by basic L2 demo"
-  [pipelineServices]: https://github.com/opendaylight/ovsdb/tree/master/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services "Pipeline Code"
-  [serviceEnum]: https://github.com/opendaylight/ovsdb/blob/master/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/Service.java "Pipeline Service Enum"
+  [pipelineServices]: https://github.com/opendaylight/ovsdb/tree/stable/helium/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services "Pipeline Code"
+  [serviceEnum]: https://github.com/opendaylight/ovsdb/blob/stable/helium/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/Service.java "Pipeline Service Enum"
   [examplePipeline]: https://docs.google.com/drawings/d/1ax9iYnVbaF49DZqrBihnOOHFjeOkMmdo779zO9xSdo0/edit?usp=sharing "Pipeline Example"
   [directorService]: https://docs.google.com/drawings/d/1TCmIeICTePmnfZuJLeSr1NYmfZMrql5utzAhhOgJvd4/edit?usp=sharing "Pipeline Director Service"
   [createTenantAndVms]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/scripts/createTenantAndVms.sh "createTenantAndVms.sh"
   [odl]: http://www.opendaylight.org/ "Opendaylight"
-  [codeClassifier]: https://github.com/opendaylight/ovsdb/blob/master/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/ClassifierService.java "Classifier Service"
-  [codeL2Fwd]: https://github.com/opendaylight/ovsdb/blob/master/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/L2ForwardingService.java "L2 Forwarding Service"
+  [codeClassifier]: https://github.com/opendaylight/ovsdb/blob/stable/helium/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/ClassifierService.java "Classifier Service"
+  [codeL2Fwd]: https://github.com/opendaylight/ovsdb/blob/stable/helium/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/L2ForwardingService.java "L2 Forwarding Service"
 

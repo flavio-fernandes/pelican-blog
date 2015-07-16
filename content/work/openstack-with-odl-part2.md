@@ -108,7 +108,7 @@ Then, we will add 4 tenant vms; 2 on each subnet. Just as shown in [picture abov
 You can see the contents of [createL3TenantAndVms.sh here][createL3TenantAndVms].
 <button class="toggle-start-hidden">Show/hide</button>
 
-[gist:id=10dcaf6b575c69e7983a]
+[gist:id=13842d133eb529be0cf4]
 
 Some interesting commands to see what was created is shown here:
 <button class="toggle-start-hidden">Show/hide</button>
@@ -249,7 +249,7 @@ Now, to the nuts and bolts of the plumbing: OVS ports/interfaces. In the control
                 Interface "vxlan-192.168.50.21"
                     type: vxlan
                     options: {key=flow, local_ip="192.168.50.20", remote_ip="192.168.50.21"}
-        ovs_version: "2.3.0"
+        ovs_version: "2.3.2"
     vagrant@devstack-control:~/devstack$
     vagrant@devstack-control:~/devstack$ sudo ovs-vsctl list Interface | grep -E '^name|^ofport |^mac_in_use|^external_id'
     external_ids        : {}
@@ -304,7 +304,7 @@ In the compute-1 node we have the following:
                 Interface br-int
             Port "tap2a008646-41"
                 Interface "tap2a008646-41"
-        ovs_version: "2.3.0"
+        ovs_version: "2.3.2"
     vagrant@devstack-compute-1:~$
     vagrant@devstack-compute-1:~$ sudo ovs-vsctl list Interface | grep -E '^name|^ofport |^mac_in_use|^external_id'
     external_ids        : {attached-mac="fa:16:3e:94:75:95", iface-id="2a008646-4110-4095-ae68-0d3c70c913fb", iface-status=active, vm-id="0b6d8e31-fa26-4315-ac44-7c87efc44aa7"}
@@ -512,23 +512,23 @@ Some related links you may find interesting:
   [part1]: http://www.flaviof.com/blog/work/how-to-odl-with-openstack-part1.html "Part 1 of this blog: Intro to Pipeline"
   [part1Table0]: http://www.flaviof.com/blog/work/how-to-odl-with-openstack-part1.html#classifier_table "Part 1, classifier table"
   [part1Table110]: http://www.flaviof.com/blog/work/how-to-odl-with-openstack-part1.html#l2_fwd_table "Part 1, layer2 forwarding table"
-  [noql3]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L75 "local.conf disable l3-agent"
-  [neutronService]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L19 "neutron service"
-  [l3fwdEnable]: https://github.com/flavio-fernandes/networking-odl/blob/master/devstack/plugin.sh#L152 "Enabling ODL L3 forwarding"
-  [odll3true]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L77 "ODL_L3"
-  [ml2l3]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L76 "L3_ENABLED"
-  [ml2serviceplugin]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L80 "service_plugins"
-  [networkingOdlDevstackReadme]: https://github.com/stackforge/networking-odl/blob/master/devstack/README.rst "networking-odl devstack readme"
+  [noql3]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L78 "local.conf disable l3-agent"
+  [neutronService]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L18 "neutron service"
+  [l3fwdEnable]: https://github.com/flavio-fernandes/networking-odl/blob/heliumkilo/devstack/plugin.sh#L112 "Enabling ODL L3 forwarding"
+  [odll3true]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L80 "ODL_L3"
+  [ml2l3]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L79 "L3_ENABLED"
+  [ml2serviceplugin]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/templates/control.local.conf.erb#L84 "service_plugins"
+  [networkingOdlDevstackReadme]: https://github.com/flavio-fernandes/networking-odl/blob/heliumkilo/devstack/README.rst "networking-odl devstack readme"
   [dvr]: https://wiki.openstack.org/wiki/Neutron/DVR "Neutron DVR"
   [createL3TenantAndVms]: https://github.com/flavio-fernandes/devstack-nodes/blob/blogDemo/puppet/scripts/createL3TenantAndVms.sh "createL3TenantAndVms.sh"
   [nxmExt]: https://github.com/openvswitch/ovs/blob/master/include/openflow/nicira-ext.h "Openflow NXM extensions"
   [l2pop]: http://assafmuller.com/2014/02/23/ml2-address-population/ "L2 population"
-  [codeArp]: https://github.com/opendaylight/ovsdb/blob/master/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/ArpResponderService.java "Arp responder service"
-  [codeNatIn]: https://github.com/opendaylight/ovsdb/blob/master/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/InboundNatService.java "Inbound Nat Service"
-  [codeNatOut]: https://github.com/opendaylight/ovsdb/blob/master/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/OutboundNatService.java "Outbound Nat Service"
-  [codeVirtualRouting]: https://github.com/opendaylight/ovsdb/blob/master/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/RoutingService.java "Routing Service"
-  [codeL3Fwd]: https://github.com/opendaylight/ovsdb/blob/master/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/L3ForwardingService.java "L3 Forwarding Service"
+  [codeArp]: https://github.com/opendaylight/ovsdb/blob/stable/helium/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/ArpResponderService.java "Arp responder service"
+  [codeNatIn]: https://github.com/opendaylight/ovsdb/blob/stable/lithium/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/InboundNatService.java "Inbound Nat Service"
+  [codeNatOut]: https://github.com/opendaylight/ovsdb/blob/stable/lithium/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/OutboundNatService.java "Outbound Nat Service"
+  [codeVirtualRouting]: https://github.com/opendaylight/ovsdb/blob/stable/helium/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/RoutingService.java "Routing Service"
+  [codeL3Fwd]: https://github.com/opendaylight/ovsdb/blob/stable/helium/openstack/net-virt-providers/src/main/java/org/opendaylight/ovsdb/openstack/netvirt/providers/openflow13/services/L3ForwardingService.java "L3 Forwarding Service"
   [daveTuckerBuildRouter]: http://dtucker.co.uk/hack/building-a-router-with-openvswitch.html "Building a router with Open vSwitch"
-  [gbp]: https://wiki.opendaylight.org/view/Group_Policy:Main "Group Based Policy"
+  [gbp]: https://wiki.opendaylight.org/view/Group_Based_Policy_%28GBP%29/Main "Group Based Policy"
   [ovn]: http://networkheresy.com/2015/01/13/ovn-bringing-native-virtual-networking-to-ovs/ "OVN, Bringing Native Virtual Networking to OVS"
   [ovnRussel]: http://blog.russellbryant.net/2015/04/08/ovn-and-openstack-integration-development-update/ "OVN and OpenStack Integration Update"
