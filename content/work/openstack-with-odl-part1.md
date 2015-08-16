@@ -527,6 +527,7 @@ Some related links you may find interesting:
 
   * [Introduction to Cloud Overlay Networks - VXLAN -- David Mahler](http://youtu.be/Jqm_4TMmQz8)
   * [Part 2 of this blog: Pipelines used for handling East/West L3 Forwarding](http://www.flaviof.com/blog/work/how-to-odl-with-openstack-part2.html)
+  * [Part 3 of this blog: L3 North-South](http://www.flaviof.com/blog/work/how-to-odl-with-openstack-part3.html)
 
   [vagrant]: https://www.vagrantup.com/ "Get Vagrant"
   [vbox]: https://www.virtualbox.org/ "Get Virtual Box"

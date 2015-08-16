@@ -325,6 +325,7 @@ Linux bridges and iptables in the compute 2 are here <button class="toggle-start
 
 This is all very similar to compute 1; as expected.
 
+<span id=lookingAtPackets />
 ### Looking at Packets ###
 
 An interesting experiment would be to ping from tenant 1 to tenant 2 and

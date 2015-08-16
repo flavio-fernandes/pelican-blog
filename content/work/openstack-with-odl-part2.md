@@ -504,11 +504,12 @@ to fully soak in how the rules get affected. Have fun!
 Some related links you may find interesting:
 
   * [Part 1 of this blog: Intro to Pipeline][part1]
+  * [Part 3 of this blog: L3 North-South](http://www.flaviof.com/blog/work/how-to-odl-with-openstack-part3.html)
   * [OVS ARP Responder](http://assafmuller.com/2014/05/21/ovs-arp-responder-theory-and-practice/)
   * [Building a router with Open vSwitch][daveTuckerBuildRouter]
   * [OVN, Bringing Native Virtual Networking to OVS](http://networkheresy.com/2015/01/13/ovn-bringing-native-virtual-networking-to-ovs/)
 
-  [odl]: http://www.opendaylight.org/software "Opendaylight"
+  [odl]: http://www.opendaylight.org/ "Opendaylight"
   [part1]: http://www.flaviof.com/blog/work/how-to-odl-with-openstack-part1.html "Part 1 of this blog: Intro to Pipeline"
   [part1Table0]: http://www.flaviof.com/blog/work/how-to-odl-with-openstack-part1.html#classifier_table "Part 1, classifier table"
   [part1Table110]: http://www.flaviof.com/blog/work/how-to-odl-with-openstack-part1.html#l2_fwd_table "Part 1, layer2 forwarding table"
