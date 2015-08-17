@@ -890,8 +890,8 @@ compute nodes and their tenant vms. Scalability as well as reactive/proactive pr
 
 Just as talked about in final thoughts of [part 2][part2], the implementation does not respond to pings destined
 to the ip addresses assigned to the virtual router. I predict [this][bug4132] will get addressed, as many more folks
-are getting involved. For a peek on the potentially new features to worked on, check out the [trello board on OVSDB
-Beryllium][trelloL3].
+are getting involved. For a peek on the potentially new functionalities to work on, check out the
+[trello board on OVSDB Beryllium][trelloL3].
 
 Feeling aspired? If so, [join in the fun!][ovsdbProjectWiki]
 
