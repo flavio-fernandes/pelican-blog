@@ -278,7 +278,7 @@ is talked about in the next sub-section.
 
 When ODL is configured to perform L3, it will ensure that patch ports are in place to connect br-ex with br-int.
 That check/creation -- similar to the creation of the vxlan tunnels -- is done on demand. So, _do not expect to see
-the patch ports until they are needed for connecting tenants tenant vms to external subnet._
+the patch ports until they are needed for connecting tenant vms to external subnet._
 The code for doing this in lithium is [BridgeConfigurationManagerImpl.java][codeAddPatchPort]
 <button class="toggle">Show/hide</button>
 
@@ -360,11 +360,12 @@ provisioned earlier in [_Installing VM to be used as External Router_](#installi
 Knowing the mac of this gateway takes some extra work, which we will talk about in the
 [gateway arp resolver subsection](#gatewayArpResolver), below.
 
-Next, let's use script that sets the context of tenant1, creates a neutron router that uses the external network (i.e. ext1)
-and creates an internal net and subnet. Then, it will attach that network as interface to the router and finally stamp
-out 2 tenant vms. Just as [depicted above](#makeTenants). As explained in [part 2][part2] the logic that accomplishes
-the routing functionality does not require a namespace, nor it uses any ports in the OVS bridge (br-int): it is simply a
-set of rules in the openflow table that makes it seem like there is a real 'box' represented by the neutron router.
+Next, let's use a script that sets the context of tenant1, creates a neutron router that uses the external network (i.e. ext1)
+and creates an internal net and subnet. Then, it will attach that network as interface to the router. Lastly, it stamps
+out 2 tenant vms and affiliates each one of them to a floating ip. Just as [depicted above](#makeTenants). As explained
+in [part 2][part2] the logic that accomplishes the routing functionality does not require a namespace, nor it uses any
+ports in the OVS  bridge (br-int): it is simply a set of rules in the openflow table that makes it seem like there is a
+real 'box' represented by the neutron router.
 
     :::bash
     $ /vagrant/puppet/scripts/createTenant1Vms.sh
