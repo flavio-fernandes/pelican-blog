@@ -37,8 +37,8 @@ I have a system running Centos 7, so [installing OVS][ovsInstall] is quite simpl
 That is mostly so because the kernel already has _openvswitch.ko_ and all that
 we need are the userspace binaries.
 
-For this setup, I use OVS bridge **br1** that is persistantly configured via **ifcfg-br1**. 
-That connects the ODL containers and the managment network used by the Openstack nodes, shown as **Openstack Underlay Net** in the
+For this setup, I use OVS bridge **br1** that is persistently configured via **ifcfg-br1**. 
+That connects the ODL containers and the management network used by the Openstack nodes, shown as **Openstack Underlay Net** in the
 picture above. I also create a tap port **tap1** which is added as part of **br1**.
 
     :::text
@@ -101,7 +101,7 @@ This is the simple bash script that gets invoked by the new service:
     /sbin/ip link set tap1 up
     /bin/ovs-vsctl --may-exist add-port br1 tap1
 
-These are the one time comands I issued in order to check/start/enable the service:
+These are the one time commands I issued in order to check/start/enable the service:
 
     :::shell
     # systemctl status ovs_taps
