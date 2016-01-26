@@ -309,7 +309,7 @@ the [previous][ospart3] Vagrant file -- [shown here][oseth1] -- is all it took t
 
 
 With that, the VMs used to represent the Openstack nodes and the containers where ODL is running
-can see each other though the 192.168.50.0/24 (underlay) subnet.
+can reach each other through the 192.168.50.0/24 (underlay) subnet.
 
 Among the [work done][odlanalytics] in [networking-odl][networking-odl] for Mitaka, I added a [change](https://review.openstack.org/#/c/249484/) that allows devstack to configure OVS with multiple managers
 <button class="toggle">Show/hide</button>
