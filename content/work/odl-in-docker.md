@@ -12,7 +12,7 @@ Using Docker to deploy a cluster of Opendaylight Controllers
 By stepping on the shoulders of giants, I assembled instructions one can use to launch multiple ODL instances
 in a cluster, and then connect Openstack Neutron to them. To accomplish this, I primarily used the [blog page
 that Anil][dockerAnil] put together. If you are not familiar with Docker, it may be helpful to spend a little time on that
-too. One of the many places I used to come up to speed on Docker is the [youtube tutorials][dockerTutorials]
+too. One of the many places I used to come up to speed on Docker were the [youtube tutorials][dockerTutorials]
 and [notes][dockerTutorialsNotes] put together by [John Willis][jw].
 
 At the end of these steps, the setup looks like this:
@@ -311,8 +311,7 @@ the [previous][ospart3] Vagrant file -- [shown here][oseth1] -- is all it took t
 With that, the VMs used to represent the Openstack nodes and the containers where ODL is running
 can see each other though the 192.168.50.0/24 (underlay) subnet.
 
-Among the work done in [networking-odl][networking-odl] for Mitaka, I added a [change](https://review.openstack.org/#/c/249484/) that allows devstack to
-configure OVS with multiple managers
+Among the [work done][odlanalytics] in [networking-odl][networking-odl] for Mitaka, I added a [change](https://review.openstack.org/#/c/249484/) that allows devstack to configure OVS with multiple managers
 <button class="toggle">Show/hide</button>
 
     :::text
@@ -343,10 +342,16 @@ connect to all ODL nodes of our cluster:
      VNCSERVER_LISTEN=0.0.0.0
 
 One thing to point out here is in regards to **ODL_MGR_IP**. In this setup, the intent is to have
-HAProxy spreading connections on the northbound to the ODL nodes. By doing that, Openstack is still
-using a single (i.e. virtual IP) address to reach all 3 ODL instances. On the southbound, active
-OVS connections allows ODL to distribute the ownership of each OVS node and provide redundancy should
-an ODL instance fail.
+[HAProxy](http://www.haproxy.com/) spreading RPCs from neutron to multiple ODL nodes.
+By doing that, Openstack is still using a single (i.e. virtual IP) address to reach all 3 ODL
+instances. I have not done the HAProxy part by the time I'm writing this, but an easy way of
+doing that would be by using [haproxy container](https://hub.docker.com/_/haproxy/). Since
+ODL's neutron [data is distributed in the backend][clusterovsdb] via md-sal, it does not really
+matter which ODL instance gets to handle the request from [networking-odl][networking-odl].
+
+On the southbound, active OVS connections allow ODL to distribute the ownership of each
+OVS node and provide redundancy should an ODL instance fail. A reference document you can
+use to see how that works is available [here][clusterovsdbsb].
 
 Once stacked, this is the output of _ovs-vsctl show_ command:
 
@@ -420,8 +425,11 @@ Some related links you may find interesting:
   * [Docker Tutorials, by John Willis][dockerTutorials]
   * [OVSDB Clustering Development Environment Setup][dockerAnil]
   * [OpenDaylight Controller:Clustering](https://wiki.opendaylight.org/view/OpenDaylight_Controller:Clustering)
-  * [Cluster Aware OVSDB](https://docs.google.com/presentation/d/1wXHq0ckucvmLT7_V4oy2FRMgFQEe22Nw_faWwLszN5k/edit?usp=sharing)
+  * [Cluster Aware OVSDB Southbound][clusterovsdbsb]
+  * [Cluster Aware OVSDB NetVirt][clusterovsdb]
 
+  [clusterovsdbsb]: https://docs.google.com/presentation/d/1ThIOTyPZBzsqg5_zwKrLo5Mqkr_m4u62cZ8t7H78TVc/edit?usp=sharing "Cluster Aware OVSDB Southbound Plugin"
+  [clusterovsdb]: https://docs.google.com/presentation/d/1wXHq0ckucvmLT7_V4oy2FRMgFQEe22Nw_faWwLszN5k/edit?usp=sharing "Cluster Aware OVSDB"
   [ospart3]: http://www.flaviof.com/blog/work/how-to-odl-with-openstack-part3.html "OpenStack with Opendaylight Part 3: L3 North-South"
   [ovsInstall]: https://n40lab.wordpress.com/2015/01/25/centos-7-installing-openvswitch-2-3-1-lts/ "CentOS 7 – Installing Openvswitch 2.3.1 LTS"
   [oseth1]: https://github.com/flavio-fernandes/devstack-nodes/commit/4c14d58453cfbb4c9ca0482578436dd860eac2e8  "Using OVS tap port for Openstack node"
@@ -443,3 +451,4 @@ Some related links you may find interesting:
   [configure-node.sh]: https://github.com/flavio-fernandes/ovsdb-cluster/blob/master/scripts/_configure-node.sh "configure-node.sh"
   [networking-odl]: https://review.openstack.org/gitweb?p=openstack/networking-odl.git;a=summary "networking-odl"
   [remove_stale_veths.sh]: https://github.com/flavio-fernandes/ovsdb-cluster/blob/master/scripts/remove_stale_veths.sh "remove_stale_veths.sh"
+  [odlanalytics]: http://stackalytics.com/?project_type=openstack&release=mitaka&metric=marks&module=networking-odl "Openstack Analytics Networking-odl"
