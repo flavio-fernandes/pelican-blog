@@ -31,7 +31,7 @@ a little on each one.
 
 #### Ikea BRIMNES [Wall Cabinet][ikea]
 
-<IMG SRC="http://flaviof.com/blog/images/office-clock-cabinet.jpg" ALT="cabinet" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-cabinet.jpg" ALT="cabinet" WIDTH=90 HEIGHT=90 BORDER=0>
 
     :::uri
     http://www.ikea.com/kw/en/catalog/products/40218078/
@@ -45,18 +45,18 @@ By swapping the sliding door with the back panel we can create a perfect front.
 The back piece is a lot slimmer, thus easier to cut.
 For doing the cutting, she used an oscillating tool like the [DeWalt Oscillating saw][dewalt] DWE315K.
 Still, I think that with a cutting knife [and patience] one can do that job as well.
-The dimensions of the cut out for the display are 20 and 5/16, by 2 and 5/8 inches.
+The dimensions of the cutout for the display are 20 and 5/16, by 2 and 5/8 inches.
 
 As you can see in the picture above, I used the holes that came with the back panel to hold the light and
-motion sensors. For the motion sensor, the squared cut out is 7/8th of an inch.
+motion sensors. For the motion sensor, the squared cutout is 7/8th of an inch.
 
-In the near future, we will tape around the edges of the cutout to make the display and the panel seamless.
+In the near future, we will tape around the edges to make the display and the panel seamless.
 
 #### Led Strip (and power adapter)
 
 <div style="height:90px;">
-<IMG SRC="http://flaviof.com/blog/images/office-clock-led-strip.jpg" ALT="ledStrip" WIDTH=90 HEIGHT=90 BORDER=0>
-<IMG SRC="http://flaviof.com/blog/images/office-clock-led-strip-power.jpg" ALT="ledStripPower" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-led-strip.jpg" ALT="ledStrip" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-led-strip-power.jpg" ALT="ledStripPower" WIDTH=90 HEIGHT=90 BORDER=0>
 </div>
 
 I plan on stretching a long and animated line of RGBs across the wall where the office clock will
@@ -71,8 +71,8 @@ More on that when we cover the [software piece][part2].
 #### 4x Bicolor Led Matrix Display (and power adapter)
 
 <div style="height:120px;border:0">
-<IMG SRC="http://flaviof.com/blog/images/office-clock-led-matrix.jpg" ALT="ledMatrix" WIDTH=120 HEIGHT=120 BORDER=0>
-<IMG SRC="http://flaviof.com/blog/images/office-clock-led-strip-power.jpg" ALT="ledStripPower" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-led-matrix.jpg" ALT="ledMatrix" WIDTH=120 HEIGHT=120 BORDER=0>
+<IMG SRC="/blog/images/office-clock-led-strip-power.jpg" ALT="ledStripPower" WIDTH=90 HEIGHT=90 BORDER=0>
 </div>
 
 After considering a couple of options, I ended up using a daisy chain of four [32x16 bicolor displays][matrix],
@@ -96,9 +96,9 @@ similar][ledstrippower] to the one used by the led strip. Thus, do what I say --
 #### Raspberry Pi and case (plus power adapter)
 
 <div style="height:100px;border:0">
-<IMG SRC="http://flaviof.com/blog/images/office-clock-pi-zero.jpg" ALT="piZero" WIDTH=120 HEIGHT=120 BORDER=0>
-<IMG SRC="http://flaviof.com/blog/images/office-clock-zero-case.jpg" ALT="zeroCase" WIDTH=90 HEIGHT=90 BORDER=0>
-<IMG SRC="http://flaviof.com/blog/images/office-clock-pi-power.jpg" ALT="piPower" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-pi-zero.jpg" ALT="piZero" WIDTH=120 HEIGHT=120 BORDER=0>
+<IMG SRC="/blog/images/office-clock-zero-case.jpg" ALT="zeroCase" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-pi-power.jpg" ALT="piPower" WIDTH=90 HEIGHT=90 BORDER=0>
 </div>
 
 I think any model of the RPI can be used for this project. In this case, I am using the RPI zero because that is
@@ -109,28 +109,28 @@ In order to better protect the RPI from my greasy fingers, I also bought a [prot
 
 #### Micro SD Memory Card
 
-<IMG SRC="http://flaviof.com/blog/images/office-clock-micro-sd.jpg" ALT="microSd" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-micro-sd.jpg" ALT="microSd" WIDTH=90 HEIGHT=90 BORDER=0>
 
 The card I'm using came as part of the [kit that I bought at Adafruit][rpizerokit]. Its is 8Gb and made by
 [Sandisk][ssd].
 
 #### USB Hub
 
-<IMG SRC="http://flaviof.com/blog/images/office-clock-usb-hub.jpg" ALT="usbHub" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-usb-hub.jpg" ALT="usbHub" WIDTH=90 HEIGHT=90 BORDER=0>
 
 This is something you may only need when using a RPI zero. In my case, I had an [old USB 2.0 hub][usbhub] from Belkin that works just fine.
 One good thing about the hub I'm using is that it has its own power supply, which makes it less taxing on the power used by the RPI.
 
 #### WIFI Dongle
 
-<IMG SRC="http://flaviof.com/blog/images/office-clock-wifi.jpg" ALT="wifi" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-wifi.jpg" ALT="wifi" WIDTH=90 HEIGHT=90 BORDER=0>
 
 The wifi dongle I'm using can be [bought at Adafruit][wifidongle] as well. Since I'm using a RPI zero, I have it
 attached to the usb hub.
 
 #### USB Audio Adapter 
 
-<IMG SRC="http://flaviof.com/blog/images/office-clock-usb-audio.jpg" ALT="usbAudio" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-usb-audio.jpg" ALT="usbAudio" WIDTH=90 HEIGHT=90 BORDER=0>
 
 Another item that you would only need if you are using a RPI zero. This is also something you [can get at Adafruit][audiousb]. There
 are [other ways that Ladyada beautifully explains][audiochoices] in regards to getting audio from RPI zero. I chose this
@@ -139,21 +139,21 @@ think that should work. ;)
 
 #### Audio Speakers
 
-<IMG SRC="http://flaviof.com/blog/images/office-clock-speakers.jpg" ALT="speakers" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-speakers.jpg" ALT="speakers" WIDTH=90 HEIGHT=90 BORDER=0>
 
 A simple set of speakers that hooks up to the USB based audio adapter or the RPI (if you are not using a RPI zero).
 I just purchased [these from AmazonBasics][speakers] for 14 bucks.
 
 #### PIR Motion
 
-<IMG SRC="http://flaviof.com/blog/images/office-clock-pir.jpg" ALT="pir" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-pir.jpg" ALT="pir" WIDTH=90 HEIGHT=90 BORDER=0>
 
 I wanted a way of detecting when there is nobody around, so the clock can go on power saver mode. For that, I
 attached a [PIR motion sensor][pir]. Hooking it up is quite simple, as I will show down below.
 
 #### Light Sensor
 
-<IMG SRC="http://flaviof.com/blog/images/office-clock-photo-resistor.jpg" ALT="photoResistor" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-photo-resistor.jpg" ALT="photoResistor" WIDTH=90 HEIGHT=90 BORDER=0>
 
 As yet another way of saving power, I wanted the ability to see how bright the room is, so I can adjust the intensity
 of the LEDs (aka PWM duty cycle). For that, I use a simple [photo resistor][photocell]. A caveat here is that the RPI
@@ -163,10 +163,10 @@ For the fun of it, I connected the photo resistor to an [MCP3002][mcp], listed b
 
 #### Analog Reader (MCP3002)
 
-<IMG SRC="http://flaviof.com/blog/images/office-clock-mcp3002.jpg" ALT="mcp3002" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-mcp3002.jpg" ALT="mcp3002" WIDTH=90 HEIGHT=90 BORDER=0>
 
-As a way of providing an 10 bit value that represents the analog 'intensity' of the light from the light sensor, this little
-gizmo offers 2 input and SPI (with data output) pins that can interface with the Raspberry Pi.
+As a way of providing an 10 bit value that represents the analog 'intensity' of the light from the light sensor, this chip
+offers 2 input and SPI (with data output) pins that can interface with the Raspberry Pi.
 I will go on more details on how that works in [part 2][part2] of this blog. 
 I only need one analog input, so I actually connected the 2 input pins to the same photo resistor. With that, the code reads
 from the 2 pins and take an simple average.
@@ -179,7 +179,7 @@ code in [part 2][part2] of this blog.
 
 #### Small Breadboard
 
-<IMG SRC="http://flaviof.com/blog/images/office-clock-bread-board.jpg" ALT="breadBoard" WIDTH=90 HEIGHT=90 BORDER=0>
+<IMG SRC="/blog/images/office-clock-bread-board.jpg" ALT="breadBoard" WIDTH=90 HEIGHT=90 BORDER=0>
 
 Given my poor dexterity in handling a soldering iron, I rather go for the breadboard whenever possible. :) On that account,
 I needed a vessel to hold the MCP3002 as well as the [Cobbler Plus][cobbler]. These are very easy to find, including the one
@@ -187,7 +187,7 @@ at the [Adafruit shop][bread].
 
 #### Raspberry Pi GPIO Breakout
 
-<IMG SRC="http://flaviof.com/blog/images/office-clock-cobbler.jpg" ALT="cobbler" WIDTH=120 HEIGHT=120 BORDER=0>
+<IMG SRC="/blog/images/office-clock-cobbler.jpg" ALT="cobbler" WIDTH=120 HEIGHT=120 BORDER=0>
 
 The easiest way to hook the GPIO (aka General Purpose Input/Output) is by using one of [these breakouts][cobbler].
 The one sold by Adafruit already comes with a 40 pin cable.
@@ -195,16 +195,16 @@ The one sold by Adafruit already comes with a 40 pin cable.
 #### Power Strip, Wires, etc
 
 <div style="height:120px;border:0">
-<IMG SRC="http://flaviof.com/blog/images/office-clock-power-strip.jpg" ALT="powerStrip" WIDTH=120 HEIGHT=120 BORDER=0>
-<IMG SRC="http://flaviof.com/blog/images/office-clock-wires.jpg" ALT="wires" WIDTH=120 HEIGHT=120 BORDER=0>
-<IMG SRC="http://flaviof.com/blog/images/office-clock-yoyo.jpg" ALT="yoyo" WIDTH=120 HEIGHT=120 BORDER=0>
-<IMG SRC="http://flaviof.com/blog/images/office-clock-glue-gun.jpg" ALT="glueGun" WIDTH=120 HEIGHT=120 BORDER=0>
+<IMG SRC="/blog/images/office-clock-power-strip.jpg" ALT="powerStrip" WIDTH=120 HEIGHT=120 BORDER=0>
+<IMG SRC="/blog/images/office-clock-wires.jpg" ALT="wires" WIDTH=120 HEIGHT=120 BORDER=0>
+<IMG SRC="/blog/images/office-clock-yoyo.jpg" ALT="yoyo" WIDTH=120 HEIGHT=120 BORDER=0>
+<IMG SRC="/blog/images/office-clock-glue-gun.jpg" ALT="glueGun" WIDTH=120 HEIGHT=120 BORDER=0>
 </div>
 
 As you can see in the pictures, I connected all the power supplies to a simple [power strip][powerStrip].
 To help myself with the soldering iron phobia, I used a couple of [Phantom Yoyo][yoyo] wires to hookup the
 displays to the breadboard.
-I also used [22 AWG solid core wires][wires] to daisy chain the power for the led matrix displays,
+I also used [22 AWG core wires][wires] to daisy chain the power for the led matrix displays,
 as well as extending the connections from the sensors to the breadboard.
 To bond the pieces together -- such as the display panels, sensors and breadboard -- I used a simple [hot glue gun][glue].
 
