@@ -5,7 +5,7 @@ Category: Hacks
 Tags: raspberryPi
 Slug: office-clock-part2
 
-Software for an led matrix display and led RGB strip DIY project
+Software for a Led Matrix Display and Led RGB Strip DIY Project
 
 <!--more-->
 
@@ -13,41 +13,43 @@ As a [continuation of part1][part1], this page will cover the software
 I put together and how I use it to bring the display alive. From here, you can learn
 about the main components of the application, as well as a few examples that show how I
 currently use it.
-If you are feeling impatient, go ahead and grab the [code from Github][code].
+If you would like to skip ahead, grab the [code from Github][code].
 
-By running the program, an embedded web server handles requests that may come
-from my desktop or any other program that may wish to control the display. 
+By running the program, an embedded web server handles requests that come
+from a desktop or any other program that wishes to control the display. 
 When the server is 'left alone' it will run as what I call _clock mode_. Motion
-and light sensors help conserving energy by keeping tabs on how bright the room is, as
-well as how long it has been since there has been any activity near the display. After a while of
-nobody around, the
-display changes to the _screen saver mode_, and it stays that way until motion is detected.
-A third mode, called _message mode_, is when we can do fun things to the display.
-You can put the unit in that mode by sending an html [POST][post] [call](#messagemodeinfo).
-The web server also offers some very simple pages, in case you
-do not want to fiddle with variables and values. More on that in the [section below](#runoclock).
+and light sensors help conserve energy by keeping tabs on how bright the room is, as
+well as how long it has been since anything moved near the display.
+After a certain period of inactivity,
+the display changes to the _screen saver mode_, and it stays that way until motion is detected.
+A third mode, called _message mode_, is where we can do fun things to the display.
+You can put the unit in that mode by sending an HTML [POST][post] [call](#messagemodeinfo).
+In case you do not want to fiddle with variables and values,
+the web server also offers some very simple pages.
+There's more on that in the [section below](#runoclock).
 
 ![displayModes](|filename|/images/office-clock-modes.jpg)
 
 While in _message mode_, there are a bunch of knobs you can set. They are divided into
-3 parts, which I will get into, as I describe the [message mode](#messagemodeinfo) in more detail:
+3 parts, which I will get into as I describe the [message mode](#messagemodeinfo) in more detail:
 
-1. main message
-1. background messages
-1. background images
+1. Main Message
+1. Background Messages
+1. Background Images
 
 
 Analogous to the led matrix display, I also have a strip of RGB leds.
-It provides a number of built in animations, as well as a way for encoding info
+It provides a number of built-in animations, as well as a
+method of encoding info
 representing external states such as weather, number of unread emails, generic countdowns, etc.
 The interface for controlling it is similar to the one for the led matrix; that is,
-using a [REST][rest]-like interface.
+using an [REST][rest]-like interface.
 
 But I'm getting ahead of myself...
 I should start off by visiting the steps to get these bits in the [Raspberry Pi][rpi].
 
 
-## Section 1: Software Pre-requisites
+## Section 1: Software Pre-Requisites
 
 #### Prepare sd with Raspbian
 
@@ -70,8 +72,8 @@ To make the filename shorter, let's rename it to **raspbian.img**
     $ mv 20*raspbian-jessie-lite.img raspbian.img
     $ sudo dd bs=1m if=./raspbian.img of=/dev/diskX  ; # replace X with the disk number
 
-Typing ^T (CTRL-T) will give you an update how how many blocks have been written.
-Jessie Lite is 1.3 Gb, so you will need about 1300 "records out". Be patient!
+Typing ^T (CTRL-T) will give you an update how many blocks have been written.
+Jessie Lite is 1.3 Gb, so you will need about 1300 "records out". You'll need to be patient.
 In my system, it took about 25 minutes (883 Kbytes/sec) to complete:
 
     :::bash
@@ -85,18 +87,18 @@ Eject disk after _dd_ is finished and use it to boot your [RPI][rpi]
     :::bash
     $ diskutil eject /dev/diskX  ; # replace X with the disk number
 
-#### First time boot commands
+#### First-time boot commands
 
-- Login (user: pi password: raspberry)
-- Run **'sudo raspi-config'** and do these:
+- Login (user: **pi** password: **raspberry**)
+- Run **'sudo raspi-config'** and follow these steps:
     - _[optional]_ Select 'Advanced Options' -> 'Hostname'
     - Select 'Internationalisation Options' -> 'Change Timezone'
     - Select 'Expand Filesystem'
     - Select 'Finish' and reboot the rpi
-- After reboot, login again and configure network, if needed
+- After reboot, login again and configure the network, if needed
     - For info on configuring wifi, look for **Command line set up** [in this page][wifiopen].
-        - If you are configuring wifi for an ssid that has no password (open),
-          you basically need to <br/>**'sudo nano /etc/wpa_supplicant/wpa_supplicant.conf'** and add the
+        - If you are configuring wifi for a ssid that has no password (open),
+          you need to <br/>**'sudo nano /etc/wpa_supplicant/wpa_supplicant.conf'** and add the
 following to that file:
 
 <pre>
@@ -128,7 +130,7 @@ network={
 sudo ifdown wlan0 && sudo ifup wlan0
 </pre>
 
-- Once you are connected to the internet, do an update to ensure you got the [latest][distupg]
+- Once you are connected to the internet, do an update to ensure you've got the [latest][distupg]
 and greatest packages.
 
 Note that you may want to reboot after that, to potentially load new linux kernel
@@ -137,13 +139,14 @@ Note that you may want to reboot after that, to potentially load new linux kerne
     $ sudo apt-get update ; sudo apt-get -y dist-upgrade
     $ sudo reboot
 
-- Install git, libevent-devel, wiringPi
+- Install git, libevent-devel, and wiringPi.
 
 Once logged in again, there are just a few more pieces to be added to the [RPI][rpi].
-I use a nice little web server implementation called [pulsar][pulsar], which is based in the [libevent][libevent]
+I use a web server implementation called [pulsar][pulsar], which is based in the [libevent][libevent]
 [html][libeventhtml] framework. In order to control the GPIOs in the [RPI][rpi], I rely on the nice api provided by
-[WiringPi][wiringpi]. All easy to install due to **apt-get** and **git**.
+[WiringPi][wiringpi]. All are easy to install due to **apt-get** and **git**.
 Life is good when you can ride on the [shoulder of giants][giants]. :)
+Here are the steps for installing them:
 
     :::bash
     $ sudo apt-get install -y git libevent-dev
@@ -152,12 +155,12 @@ Life is good when you can ride on the [shoulder of giants][giants]. :)
     $ git clone git://git.drogon.net/wiringPi wiringPi.git
     $ cd wiringPi.git && ./build
 
-- Download and compile the main application
+- Download and compile the main application.
 
 As mentioned earlier, the source code is available at [Github][code]. In order to keep the info
-in this page from going stale, I will be using the branch **rpi-0.1.y**, which I will not mess with.
-Unless a nasty bug shows up. :)
-I will talk more about the code itself in [section 3](#codenav).
+in this page from going stale, I will be using the branch **rpi-0.1.y**, which I will not mess with...
+unless a nasty bug shows up. :)
+There's more about the code itself in [section 3](#codenav).
 
     :::bash
     $ cd ; # not really important where, but oclock.service may need to be edited
@@ -169,7 +172,7 @@ With that finished, you are ready to rumble! The executable is called oclock (sh
 
       ~/oclock.git/oclock
 
-As you will soon see, it is more than a clock, really. I must confess I'm not good with names. :)
+As you will soon see, it is more than a clock. I must confess I'm not good with names. :)
 The application provides a simple way of displaying any kind of information and images.
 Since access to GPIO pins is privileged, the Makefile will make that executable
 owned by root and set the [sticky bit][stickybit].
@@ -178,10 +181,10 @@ There are a few files that you may want to modify, depending on the GPIO pins
 you end up using. I will cover that as I visit each component of the code, in the [code navigation section](#codenav).
 
 <span id=runoclock />
-## Section 2: Running oclock
+## Section 2: Running Oclock
 
-It is very easy to make the application start automatically. More on that is explained in the
-[section below](#systemd) (called _Make it a systemd service_).
+It is easy to make the application start automatically. More on that is explained in the
+[section below](#systemd) (called _Making a Systemd Service_).
 Once it is running -- either by invoking **~/oclock.git/oclock** or starting the linux service -- you should be able
 to interact with the display as I show in this section.
 
@@ -190,7 +193,7 @@ Perhaps one of easiest ways to see what you can do is by running the [stickManAn
 ![stickMenAnimation](|filename|/images/office-clock-stick-men.jpg)
 
     :::bash
-    $ # start program in background, if you have not already done so
+    $ # start program in background if you have not already done so
     $ ~/oclock.git/oclock &
 
     $ # add some people to the dance floor :)
@@ -201,14 +204,14 @@ Perhaps one of easiest ways to see what you can do is by running the [stickManAn
     $ # if you started it above, you can stop oclock program by running killall
     $ killall oclock
 
-Another really easy way, is by using the browser and connecting to the server running in the [RPI][rpi], as shown here:
+Another simple way is by using the browser and connecting to the server running in the [RPI][rpi], as shown here:
 
     :::uri
     http://RPI_ADDRESS/msgMode
 
 ![helloMsgMode](|filename|/images/office-clock-hello-world.jpg)
 
-It is actually easy to control the display from a shell prompt. For an example on how that is done, check out
+You can control the display from a shell prompt. For an example on how that is done, check out
 these commands:
 
     :::bash
@@ -219,34 +222,34 @@ these commands:
     $ curl --request POST "http://${RPI}/msgMode" --data \
          "msg=${MSG}&noScroll=1&bounce=1&timeout=${TIMEOUT}&x=${X}"
 
-There are more knobs you can tweak than the example above; but that should give you an idea of how to make it go.
+There are more knobs you can tweak than the example above, but that should give you an idea of how to make it go.
 
 <span id=messagemodeinfo />
-### The message mode of the led matrix display
+### The Message Mode of the Led Matrix Display
 
-As mentioned earlier, while in **message mode** there 3 parts that you can tweak:
+As mentioned earlier, while in _message mode_ there 3 parts that you can tweak:
 
-1. main message
-1. background messages
-1. background images
+1. Main Message
+1. Background Messages
+1. Background Images
 
-By the way, the code that serves the pages that provide these options is in [webHandlerInternal.cpp][webHandlerMsgMode].
-The code that handles the options and make it happen is in [displayInternal.cpp][doHandleMsgModePost].
+The code that serves the pages that provide these options is in [webHandlerInternal.cpp][webHandlerMsgMode].
+The code that handles the options and makes it happen is in [displayInternal.cpp][doHandleMsgModePost].
 
-Let me talk a bit about each one of the 3 parts mentioned above.
+Here's a bit about each one of the 3 parts mentioned above.
 
 #### Main Message ####
 
     :::uri
     http://${RPI}/msgMode
 
-This represents the _main_ text you want displayed in the screen. When it comes to attributes, the sky
-is the limit on what you can implement, but these are the ones I started with:
+This represents the _main_ text you want to be displayed in the screen. When it comes to attributes, the sky's
+the limit on what you can implement, but these are the ones I started with:
 
 - **msg**: what characters to display
 - **font**: font to use for the message text. That is [enumerated here][fontsEnum]
 - **alternateFont**: as the text scrolls (or bounce) out, change the font used (boolean)
-- **confetti**: use to sprinkle random dots around display. The biggest the value, the more dots (integer)
+- **confetti**: use to sprinkle random dots around the display. The biggest the value, the more dots (integer)
 - **bounce**: indicate whether text has the jumping effect (boolean)
 - **noScroll**: indicate whether text moves like a stock market ticker effect (boolean)
 - **blink**: make it flash (boolean)
@@ -255,8 +258,8 @@ As the text scrolls or bounce, you can make the color change by selecting _alter
 That is [enumerated here][colorEnum]
 - scroll **repeats**: similar to **timeout**, this gives a way of leaving _message mode_ after
 the message scrolled by a finite number of times (integer)
-- **timeout**: number of seconds until text is to end (can be infinite, if you set it to 0)
-- **X** and **Y**: zero based coordinates of where text will start from. You can use negative values if you
+- **timeout**: number of seconds until text is to end (can be infinite if you set it to 0)
+- **x** and **y**: zero-based coordinates of where text will start from. You can use negative values if you
 want to crop from the left (or top)
 
 #### Background Messages and Images ####
@@ -269,27 +272,27 @@ While in message mode, you can also _stamp_ text and images around the display. 
 URLs for the text (i.e. message) and the image, they are very similar in terms of the parameters
 you would provide:
 
-- **index**: a zero based value to represent the text/image you are setting (integer)
+- **index**: a zero-based value to represent the text/image you are setting (integer)
 - **msg or imgArt **: what characters to display (background message) or what to draw (background image)
 - **enabled**: set this to false to not display the provided text/image index (boolean)
 - **clear all**: set this to _true_ and all other text/image entries will be disabled and cleared (boolean)
 - **color**: red, green or yellow. That is [enumerated here][colorEnum]
 - **font**: font to use for the message text. This does not apply to image. That is [enumerated here][fontsEnum]
-- **X** and **Y**: zero based coordinates of where text/image will start from. You can use negative values if you
+- **x** and **y**: zero-based coordinates of where text/image will start from. You can use negative values if you
 want to crop from the left (or top)
 - **animation**: see below.
 
 One interesting caveat here is that these are only visible when display is in message mode, and that is
-controlled by the _main message_ url we talked above. So, it is possible that you may want to set message mode
-with an _empty_ **msg** attribute, so the display provides you with a clean canvas to draw upon. the
-[stickMan animation][stickmanchange] example does exactly that, while taking advantage of the **confetti**
+controlled by the _main message_ url mentioned above. Therefore, it is possible that you may want to set message mode
+with an _empty_ **msg** attribute, so the display provides you with a clean canvas to draw on. The
+[stickMan animation][stickmanchange] example does exactly that while taking advantage of the **confetti**
 behavior.
 
-##### Animation: speed, number of frames and frame id.
+##### Animation: Speed, Number of Frames and Frame ID.
 
-To provide the ability of animating the background msg and images, I came up with the idea of using multiple
+To animate the background msg and images, I came up with the idea of using multiple
 **indexes** that can be orchestrated using 3 parameters. Let's say I want an animation that says: "this", then "is"
-and then "fun". And I would like it to rotate every 500 milliseconds, and then an extra 500ms before starting over.
+and then "fun". I would like it to rotate every 500 milliseconds, and then wait an extra 500ms before starting over.
 With that in mind, the parameters would look like this:
 
 - **index:** 10 **msg:** this **animationStep:** 500ms **animationPhase:** 4 **animationPhaseValue:** 0 
@@ -297,11 +300,11 @@ With that in mind, the parameters would look like this:
 - **index:** 12 **msg:** fun  **animationStep:** 500ms **animationPhase:** 4 **animationPhaseValue:** 2 
 
 The **index** -- as long as it's unique and within the number of [supported indexes][maxIndexes] -- is not important.
-Animation step is actually an [enumerated type][enumAnimationStep] used to represent the frame rate.
+Animation step is an [enumerated type][enumAnimationStep] used to represent the frame rate.
 In this case, 500ms is actually the [value 3][enumAnimationStep].
 Animation phase is the number of entries you want in the animation (i.e. number of frames).
-Since we need to introduce a 'blank' frame in the animation, we use the value of 4 (3 entries plus an empty phase value).
-Lastly, we use **animationPhaseValue** to indicate _when_ each of the entries provided are to be shown in the
+Since we need to introduce a 'blank' frame in the animation, use the value of 4 (3 entries plus an empty phase value).
+Then, we use **animationPhaseValue** to indicate _when_ each of the entries provided are to be shown in the
 animation (i.e. frame id).
 
 [These commands][animateExample] would do that trick:
@@ -332,23 +335,24 @@ animation (i.e. frame id).
 
 
 So, if we wanted to have an extra 500ms delay between each animation cycle, all that is needed would be to use PHASE=5.
-Hopefully this will make sense to you. In my defense, this implementation allows for a lot of variations when doing animations.
-To have some more fun, try playing with the background images instead of messages. For that,
-the main difference is that you use the **[imgArt][enumImgArt]** instead of **msg**. That is a zero based list that can be found
+This implementation allows for a lot of variations when doing animations.
+To have some more fun, try playing with the background images instead of messages.
+The main difference being the use of
+**[imgArt][enumImgArt]** instead of **msg**. That is a zero-based list that can be found
 [in this file][enumImgArt].
 
 #### Postman
 
 A handy tool for interacting with a device that responds to HTTP requests is called [Postman][postman].
-I use that as an efficient way of testing various attributes and values for this program.
+I use it as an efficient way of testing various attributes and values for this program.
 What is also great is that we can easily share a group of HTTP requests as a postman _collection_.
-If you never used [Postman][postman], give it a try!
-All in all, here is a collection you can use for interacting with the oclock application:
+If you've never used [Postman][postman], give it a try!
+Here is a collection you can use for interacting with the oclock application:
 
     :::uri
     https://www.getpostman.com/collections/f3117dd8a2924ede21cb
 
-Or, you can also import from the [collection][postmanColl] and [environment][postmanEnv] files I added to the Github repo,
+You can also import from the [collection][postmanColl] and [environment][postmanEnv] files I added to the Github repo,
 under the [misc][miscDir] directory.
 Just make sure that **rpiAddr** and **rpiPort** are correct for your postman environment and you will be good to go.
 
@@ -358,7 +362,7 @@ Yet another way for getting this collection is by pressing on the orange looking
 
 
 <span id=systemd />
-#### Make it a systemd service
+#### Making a Systemd Service
 
 To make this  application start automatically upon system boot, do the following
 steps to make it known by systemd. First, edit the file **oclock.service**
@@ -370,7 +374,7 @@ for your [RPI][rpi]. Once that is done, copy it to the proper place and enable t
     $ sudo cp misc/oclock.service /lib/systemd/system/
     $ sudo systemctl enable oclock.service
 
-You can start and check the status of the service by doing these commands:
+You can start and check the status of the service with these commands:
 
     :::bash
     $ sudo systemctl start oclock.service
@@ -398,11 +402,10 @@ If you want to stop it from starting automatically, disable it:
 <span id=codenav />
 ## Section 3: Code Navigation
 
-oclock code is written in c and c++11. Python would have been a good candidate, but I started off
-with the need for porting some libraries in c++ and decided to keep the language somewhat homogenous.
+Oclock code is written in c and C++11. Python would have been a good candidate, but I started off
+with the need for porting some libraries in C++ and decided to keep the language somewhat homogenous.
 Coming from my past experiences on developing for the Arduino platform, I am blown away with
-the level of stability,
-speed and memory I get while using the [RPI][rpi].
+the level of stability, speed, and memory of the [RPI][rpi].
 Having the ability to attach a debugger to the running process is
 priceless. While I had some initial success in using Valgrind, I ran into a brick wall due to a
 [known issue][vgbug]. Overall, I still find the [RPI][rpi] to be
@@ -411,28 +414,27 @@ me a rock solid TCP/IP stack. Definitely a keeper. ;)
 
 #### Led Matrix Display
 
-One of the bigger chunks of the work was the porting of libraries from Arduino to [RPI][rpi]. The code I
+A bigger chunk of the work was the porting of libraries from Arduino to the [RPI][rpi]. The code I
 used to handle the lower levels of the [led matrix][matrixmanual] comes from the
-[HT1632 for Arduino][ht1632project] repo. One of the issues while doing the port had to do with the
+[HT1632 for Arduino][ht1632project] repo. An issue while doing the port had to do with the
 bit shift operator (i.e. **>>**). For some reason, the Arduino CPU is okay with shifting values by negative
 values, like **VAR = 0x123 >> -2**. [RPI][rpi] was not giving a compiler warning, yet a very different
 result when performing that operation.
 Even though I pushed the [changes into the Arduino repo][ht1632rpi],
 I kept the HT1632 code embedded in the oclock as well, under the [ht1632][ht1632dir] directory.
-The [interface exposed][ht1632h] from the HT1632 is pretty easy to understand. I would love to add
+The [interface exposed][ht1632h] by HT1632 is pretty simple. I would love to add
 more to that someday. Something like "**drawLine(...)**", "**drawRectangle(...)**" and
-"**drawCircle(...)**" could be useful. I have that in my todo list, but not at a high priority.
+"**drawCircle(...)**" could be useful. I have that on my todo list, but not at a high priority.
 
-If you **were using fewer or more than 4 bicolor displays**, all you need to change is the
-[NUM_OF_BICOLOR_UNITS][ht1632units] value. The place where you specify what GPIOs pins are
-used for controlling the HT1632 are located in the [display.cpp][ht1632gpios] file.
+If you are using **fewer or more than 4 bicolor displays**, all you need to change is the
+[NUM_OF_BICOLOR_UNITS][ht1632units] value. The place where you specify what GPIO pins are
+used for controlling the HT1632 is located in the [display.cpp][ht1632gpios] file.
 
-If you look in the code, you will see that the HT1632 object is instantiated and handled by the
+If you look at the code, you will see that the HT1632 object is instantiated and handled by the
 Display class, also in the [display.cpp][displayClass] file. There is a dedicated thread which is constantly
 monitoring what changes need to be done to HT1632. While in _message mode_, every [fast tick][displayFastTick]
 will cause the main message and all the background images/messages to be drawn. If that is not happening
 fast enough for you, all that needs to be tweaked is the [timerTick::millisPerTick][timerTickFast] value.
-No biggie! ;)
 The speed of the [RPI][rpi] -- even with the 'little' Pi zero -- together with the "vast"
 amounts of memory to hold the [shadow space][ht1632shadow] for the 4 bicolor displays was a great upgrade
 from using Arduino boards.
@@ -446,66 +448,65 @@ brightness level of the light sensor.
 
 [Ladyada][ada] has an awesome video on youtube that [talks about ways of working around this limitation][analogread].
 For the fun of it, I connected the photo resistor to an [MCP3002][mcp].
-Thanks to [awesome resources][mcpblog], it was pretty easy to write a little c++ class to abstract
-the reading of the 10 bit value from that chip. While I'm aware that there are already other implementations
-for doing this (see [wiringPi MCP3002][wiringpiMcp]), I opted for a native c++ code and did not want to require
-the use of [hardware SPI][hardwareSpi] pins. Using any available GPIO pin and performing the needed bit bangs works out
-just fine.
-Besides being a lot of fun to write, of course. :) The result of
-that was the creation of the [mcp300x repo][mcpcode], which is small enough to make me go ahead and simply
-duplicate it under the oclock repo as well.
+Thanks to [awesome resources][mcpblog], it was not hard to write a little C++ class to abstract
+the reading of the 10-bit value from that chip. While I'm aware that there are already other implementations
+for doing this (see [wiringPi MCP3002][wiringpiMcp]),
+I opted for a C++ implementation that did not require the use of [hardware SPI][hardwareSpi] pins.
+Aside from it being a lot of fun to write, of course. :)
+The result of that was the creation of the [mcp300x repo][mcpcode], which is small enough to make me go ahead
+and simply duplicate it under the oclock repo as well.
 That is under the [mcp300x directory][mcp300xdir] and to be fair, I needed to add an extra knob for using it in the
 oclock context.
-Specifically, I wanted a way of coordinating among all the threads of the code that use the GPIOs.
+Specifically, I wanted a way of coordinating among all the threads of the program that use the GPIOs.
 That is likely a non-issue, but for debugging sake it is good to ensure access atomicity among the bit bangers: HT1632,
-LPD8806 and the MCP3002. Thus, I extended them to acquire a lock before they did any bit banging on the GPIO pins.
+LPD8806, and the MCP3002. Thus, I extended them to acquire a lock before they did any banging on the GPIO pins.
 That mutex is provided to MCP300x upon its constructor, in the file [lightSensor.cpp][lightSensorMcptor].
 
 To diminish the jitter in the values read by the MCP3002, the light sensor code keeps the [last N][lightSensorLastN]
 reads from a [periodic interval][lightSensorInterval]. It then computes an average from that history
 [on demand][ligthSensorAvg].
 
-Lastly, I should mention that the place where you specify what GPIO pins are
-used for controlling the MCP3002 are located in the [lightSensor.cpp][lightSensorgpios] file.
+The place where you specify what GPIO pins are
+used for controlling the MCP3002 is located in the [lightSensor.cpp][lightSensorgpios] file.
 
 #### Embedded Web Server
 
 In my quest for a web server code with a clean and small footprint
 -- yet powerful enough to handle multiple connections --
 I began browsing Github.
-A quote I really like fits nicely in this context:
+A quote I really like from "[Made to Stick][stick]" fits nicely in this context:
 
     :::text
-    "Don't think outside the box, go box shopping" (Dan and Chip Heath; Made to Stick)
+    "Don't think outside the box, go box shopping," (Heath).
 
 I found many [good candidates][webservers] but settled with [abhinavsingh/pulsar][pulsar]
 due to a few reasons -- which reminded me of rule **7a** of [RFC 1925][rfc1925]
 
-- small, but not too small
-- easy to embed
-- robust
-- written in C (C++ would be fine too...)
+- Small, but not too small
+- Easy to embed
+- Robust
+- Written in C (C++ is fine, too)
 
 Porting it over was trivial. After [addressing a couple of minor issues][pulsarpull], I had that running within the oclock
 process. As it is written to be event driven, it spawns a few worker threads that handle http requests in parallel.
 The working model is common: each worker thread registers itself as a [callback handler][pulsarworkercallback]
 for the one listening socket created by the [server thread][pulsarservercode].
-There are lots of good documentation on [libevent][libeventhtml], which made this server even easier to understand.
+There are lots of good documentations on [libevent][libeventhtml], which made this server even easier to understand.
 The worker thread executes a function called [handleRequest][workerhandlerequest],
-which integrates with the rest of the c++ code, called [WebHandlerInternal][workerhandlerequest2].
-Critical sections of that code are protected by using mutex or a [mailbox-like message queue][mailboxcode].
+which integrates with the rest of the C++ code, called [WebHandlerInternal][workerhandlerequest2].
+Critical sections of that code are protected by using a mutex or a [mailbox-like message queue][mailboxcode].
 
 There are just a few parameters you can tweak:
 
-- number of worker threads
-- server's tcp port
-- verbosity
-- logfile
+- Number of worker threads
+- Server's tcp port
+- Verbosity
+- Logfile
 
 Look [here][pulsarargv] to see the parameters you can pass into it without having to recompile the program. Otherwise, just
 edit [conf.h][pulsarconfh] and [pulsar.c][pulsarargv] to make some more permanent tweaks.
 
-To keep it self contained but yet embedded in the oclock program, I added the
+To keep it self-contained but yet embedded in the oclock program, I added the
 [Pulsar codebase in a directory by itself][pulsardir].
 Not much more to say on that... it just works perfectly! Big thanks to [Abhinav][abhinavsingh] for putting that code
 together. And to [libevent][libevent] as well. :)
@@ -515,12 +516,12 @@ together. And to [libevent][libevent] as well. :)
 Another [porting I did][ledstripcode] was to use the code that [Ladyada][ada] and [PaintYourDragon][paintYourDragon] wrote to
 control a strip of RGB leds. That code -- [adafruit/LPD8806][adalpd8806] in Github -- was implemented to run in 2 different ways:
 using hardware SPI or using _any GPIO_ pins.
-Once again I decided going the _any GPIO_ route, since it is plenty fast
-and gives us the freedom to use any pair of GPIO pins (clock and data). As I studied that code, I made some enhancements to
-not do 'bit bang' for all the pixels on every refresh. Instead, I added a variable that keeps tabs on the
+Once again I decided to go the _any GPIO_ route since it is plenty fast
+and gives us the freedom to use any pair of GPIO pins (clock and data). As I studied that code, I made some enhancements
+to not "bit bang" all the pixels on every refresh. Instead, I added a variable that keeps tabs on the
 _[largest pixel][largestChangedLed]_
 referenced since the last refresh (called _[LPD8806::show()][lpd8806show]_). The API is even simpler than the one
-used by HT1632, so it was no big deal getting that working. In fact, I must confess I spent more time
+used by HT1632, so it was no big deal getting that working. In fact, I spent more time
 playing with the RGB animations than actually coding this stuff. ;)
 
 A thread in the program is allocated to control the entire strip. It ticks off on its own [timer][ledstriptick] and
@@ -528,22 +529,22 @@ will bit bang all the 3 bytes per pixel -- on all 240 pixels -- within a millise
 without breaking a sweat (no hardware SPI involved).
 
 Like I mentioned before, the LPD8806 code is what does the real work here, and that has been embedded under the
-[its own][lpd8806dir] directory. The c++ wrapper code that runs the ledStrip thread and 'owns' LPD8806 is located
+[its own][lpd8806dir] directory. The C++ wrapper code that runs the ledStrip thread and 'owns' LPD8806 is located
 in the file... you guessed it: [ledStrip.cpp][ledstripcpp]. ;) If you need to use different GPIO pins, look no further
 than lines 16 and 17 of [that file][ledstripgpios].
-It is also in there (line 15) where we specify the total number of LEDs in the strip.
-Lastly, look at this [Github commit][ledstripBinCount] for the stepping stones on how to add a new animation.
+We also specify the total number of LEDs in the strip in there (line 15).
+Look at this [Github commit][ledstripBinCount] for the stepping stones on how to add a new animation.
 
 #### Threads
 
 Using threads, I separated the different functionalities of this program into their own corner:
 
-- master timer tick
-- led matrix display
-- led strip
-- light sensor
-- motion sensor
-- web server
+- Master timer tick
+- Led matrix display
+- Led strip
+- Light sensor
+- Motion sensor
+- Web server
 
 These threads are known and dispatched by the main() function by using the [threadsMain.h][threadsMainh] file,
 using a common [start function][threadMainFunction].
@@ -552,7 +553,7 @@ In order to share a common timer, we have the master timer tick thread which pro
 API for all the threads that need to do something at a given interval. Special care is needed to stop the
 timer tick last, so all threads can exit gracefully upon receiving the [terminate message][terminatemsg]. That
 final message is sent after the pulsar server stops running; due to a [signal trap][webserversignal]. Such signal
-may come externally, or artificially generated when handling the _[stop url][stophandler]_
+may come externally, or artificially generated when handling the _[stop URL][stophandler]_
 ([server_stop function is here][webserverstop]).
 
 Another category of functionality -- for the lack of a better word -- is the **[inbox][mailboxcode]**. Through
@@ -560,18 +561,19 @@ that, all threads can asynchronously queue messages for each other, or
 [broadcast][inboxbcast] whatever it deems important. The motion sensor thread, for instance, [uses the mailbox][motionevent]
 to broadcast situations when motion detection starts or stops.
 
-And that is pretty much all I got on the description of the code for making oclock do its thing! My hope is that
+That is pretty much all
+there is to the code for making oclock do its thing! My hope is that
 folks will not have trouble using/changing it for whatever purposes they can think of.
 
 ## Future enhancements
 
-##### Led strip encoding
+##### Led Strip Encoding
 
-Probably on the top of my laundry list is the addition of a parser that can take a string of values to represent
+Probably on the top of my list is the addition of a parser that can take a string of values to represent
 a group of pixels and colors for the led strip. I already made the [html form able to provide][ledstriprawvalues]
-expose that, but the code behind it is still absent. Sorry!
-A step beyond this goal will be to have another set of values
-to indicate what the pixels should become bright and dim in a loop on their on; like a heartbeat. And blink.
+that, but the code behind it is still absent. Sorry!
+A step beyond this goal is to have another set of values
+to indicate when the pixels should become bright and dim in a loop on their own; like a heartbeat. And blink.
 Adding animations is an endless and big ball of fun. :)
 
 ##### Sound
@@ -580,7 +582,7 @@ I did not get around to that yet, but we can easily add another thread in the pr
 for playing mp3s or text synthesizer. With the [RPI][rpi], this is actually very easy to do, thanks to the
 helpful blogs available, [like this one][synthesizer].
 
-##### Add more images, fonts
+##### More Images and Fonts
 
 Get creative and add more fonts and images!
 [Gaurav][gaurav] wrote some nice [javascript][leddrawsrc] that generates the binary value
@@ -598,24 +600,25 @@ As a concrete example, look at the [Github commit][stickmanchange], where I adde
 ##### Connecting from the Clouds
 
 In a nutshell, the oclock program's purpose in life is to provide a "dumb" interface that lets smarter
-things/people control the display and the led strip. Thus, showing the time and date is just a side job, really. ;)
-These smart people/devices can delegate out on the details
-of how the display works, and get what she/he/it needs by using simple http requests. 
+people/devices control the display and the led strip. Thus, showing the time and date is just a side job, really. ;)
+These smart people/devices can delegate the details
+of how the display works and get what she/he/it needs by using simple http requests. 
 I have actually written a controller program for doing that in [Erlang](http://www.erlang.org/),
 but it was for a different "dumb" device. Playing with one for the oclock will be another blast of fun.
 
-There is also room for having the oclock program integrate with [MQTT][mqtt] and send notifications about motion
-detected, for instance. By subscribing to MQTT, we can offer an alternate way of controlling the display too.
+There is also room for having the oclock program integrate with [MQTT][mqtt] and send notifications,
+like motion detected.
+By subscribing to MQTT, we can offer an alternate way of controlling the display too.
 Using [Adafruit.io][adaio] would be a nice and easy way to get going on that.
 
 ## Final thoughts
 
-Hopefully this was useful and will inspire you to build an awesome "Office clock"; much better than what I got.
+Hopefully, this was useful and will inspire you to build an awesome "Office clock"; much better than what I got.
 If I can clarify something that was not well described, don't be shy in reaching out to me. There are lots of
 great resources out there for learning on how to DIY.
-Adafruit's [learn][adalearn] and [Adafruit Pi Zero Contest videos][adavideos],
+Check out Adafruit's [learn][adalearn] and [Adafruit Pi Zero Contest videos][adavideos],
 [Hackaday](https://hackaday.io/),
-[Collins Lab](https://youtu.be/9cps7Q_IrX0?list=PL6F433DD9F964C78A) to name a very few.
+and [Collins Lab](https://youtu.be/9cps7Q_IrX0?list=PL6F433DD9F964C78A) to name a very few.
 
 Enjoy!
 
@@ -675,13 +678,14 @@ Enjoy!
 [mcpblog]: https://learn.adafruit.com/reading-a-analog-in-and-controlling-audio-volume-with-the-raspberry-pi/ "Analog Inputs for Raspberry Pi"
 [wiringpiMcp]: http://git.drogon.net/?p=wiringPi;a=blob;f=wiringPi/mcp3002.c;h=8e191b6225fab8cabb82b3636c66a6bc61513c53;hb=HEAD "wiringPi mcp3002"
 [hardwareSpi]: https://www.raspberrypi.org/documentation/hardware/raspberrypi/spi/README.md#hardware "RPI hardware SPI"
-[mcpcode]: https://github.com/flavio-fernandes/mcp300x "c++ codebase to control analog to digital converter in Raspberry Pi"
+[mcpcode]: https://github.com/flavio-fernandes/mcp300x "C++ codebase to control analog to digital converter in Raspberry Pi"
 [mcp300xdir]: https://github.com/flavio-fernandes/oclock/tree/rpi-0.1.y/mcp300x "mcp300x dir"
 [lightSensorMcptor]: https://github.com/flavio-fernandes/oclock/blob/rpi-0.1.y/src/lightSensor.cpp#L100 "mcp300x constructor by lightSensor class"
 [lightSensorLastN]: https://github.com/flavio-fernandes/oclock/blob/rpi-0.1.y/src/lightSensor.cpp#L11 "light sensor value history"
 [lightSensorInterval]: https://github.com/flavio-fernandes/oclock/blob/rpi-0.1.y/src/lightSensor.cpp#L91 "light sensor read interval"
 [ligthSensorAvg]: https://github.com/flavio-fernandes/oclock/blob/rpi-0.1.y/src/lightSensor.cpp#L79 "Light sensor average calculation"
 [lightSensorgpios]: https://github.com/flavio-fernandes/oclock/blob/rpi-0.1.y/src/lightSensor.cpp#L12 "MCP3002 GPIO pins"
+[stick]: http://heathbrothers.com/books/made-to-stick/ "Made to Stick"
 [webservers]: https://gist.github.com/caa9f8dea249ad53c3bd221cd65bbe39 "Web server candidates"
 [rfc1925]: http://www.faqs.org/rfcs/rfc1925.html "The Twelve Networking Truths"
 [pulsarpull]: https://github.com/abhinavsingh/pulsar/pull/1 "Pulsar minor fixes"

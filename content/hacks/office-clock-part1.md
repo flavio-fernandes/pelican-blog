@@ -5,7 +5,7 @@ Category: Hacks
 Tags: raspberryPi
 Slug: office-clock-part1
 
-Hardware for an led matrix display and led RGB strip DIY project
+Hardware for a Led Matrix Display and Led RGB Strip DIY Project
 
 <!--more-->
 
