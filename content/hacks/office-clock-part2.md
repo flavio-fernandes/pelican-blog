@@ -1,4 +1,4 @@
-Title: Office Clock Project part 2: software
+Title: Office Clock Project Part 2: Software
 Date: 2016-04-05 16:48
 Author: flavio
 Category: Hacks
@@ -303,7 +303,7 @@ The **index** -- as long as it's unique and within the number of [supported inde
 Animation step is an [enumerated type][enumAnimationStep] used to represent the frame rate.
 In this case, 500ms is actually the [value 3][enumAnimationStep].
 Animation phase is the number of entries you want in the animation (i.e. number of frames).
-Since we need to introduce a 'blank' frame in the animation, use the value of 4 (3 entries plus an empty phase value).
+Since we need to introduce a 'blank' frame in the animation, use the value of 4 (3 messages plus an empty phase value).
 Then, we use **animationPhaseValue** to indicate _when_ each of the entries provided are to be shown in the
 animation (i.e. frame id).
 
@@ -402,7 +402,7 @@ If you want to stop it from starting automatically, disable it:
 <span id=codenav />
 ## Section 3: Code Navigation
 
-Oclock code is written in c and C++11. Python would have been a good candidate, but I started off
+Oclock code is written in C and C++11. Python would have been a good candidate, but I started off
 with the need for porting some libraries in C++ and decided to keep the language somewhat homogenous.
 Coming from my past experiences on developing for the Arduino platform, I am blown away with
 the level of stability, speed, and memory of the [RPI][rpi].
@@ -418,7 +418,7 @@ A bigger chunk of the work was the porting of libraries from Arduino to the [RPI
 used to handle the lower levels of the [led matrix][matrixmanual] comes from the
 [HT1632 for Arduino][ht1632project] repo. An issue while doing the port had to do with the
 bit shift operator (i.e. **>>**). For some reason, the Arduino CPU is okay with shifting values by negative
-values, like **VAR = 0x123 >> -2**. [RPI][rpi] was not giving a compiler warning, yet a very different
+values, like **VAR = 0x123 >> -2**. [RPI][rpi] does not give a compiler warning, yet a very different
 result when performing that operation.
 Even though I pushed the [changes into the Arduino repo][ht1632rpi],
 I kept the HT1632 code embedded in the oclock as well, under the [ht1632][ht1632dir] directory.

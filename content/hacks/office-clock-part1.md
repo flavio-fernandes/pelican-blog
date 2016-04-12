@@ -1,4 +1,4 @@
-Title: Office Clock Project part 1: hardware 
+Title: Office Clock Project Part 1: Hardware 
 Date: 2016-03-28 16:48
 Author: flavio
 Category: Hacks
