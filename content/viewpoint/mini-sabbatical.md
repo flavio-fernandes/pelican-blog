@@ -38,18 +38,18 @@ I found myself unable to repudiate the naging feeling that a lot more could be a
 Needless to say, **this is my very personal opinion!** If you are a Java person, please do ignore me and rock on.
 The right tool for the right _job_ has always been my motto. 
 Furthermore, even if I concede to the argument that Java is the
-right tool for building an SDN controller, it became clear to me that that is the
+right tool for building an SDN controller, it became clear that is was the
 wrong _job_ for me. Super ironic, given the fact that I have grown a profound liking and respect for my
 boss and colleagues at Red Hat. Heh, I'm just lucky that way. :P I terminated my employment
 at the end of January 2016.
 
 
 Instead of aggressively pursuing my dream job I did something different. Simply put, I just did _not_. :) 
-What I did instead was to take advantage of a very special situation I had going: my supportive wife!
-Inspired by the [TED talk by Nigel Marsh][tedtalk], together with the health insurance provided
-by wife's job, and a modest saving I
-accumulated over the 16+ years of working the time was ripe:
-I'm giving myself a sabbatical! Another inspiration for pulling this off comes from one my gurus
+What I did instead was to take advantage of a very special situation I had going.
+I got inspired by the [TED talk by Nigel Marsh][tedtalk], together with the health insurance provided
+by my supportive wife's job, and savings I accumulated over the 19+ years of non-stop working. 
+Thus the time was ripe: I'm giving myself a sabbatical!
+Another influence for pulling this off comes from one my gurus
 (and dear friend) [Bruno Rijsman](https://www.linkedin.com/in/brunorijsman).
 At certain points in time, I witnessed him and his wife taking 6 months to a year off,
 just to explore the world.
@@ -60,7 +60,7 @@ are holding steady. ;) I had enough cash aside to purchase all the parts needed 
 
 ![fitbitApril2016](|filename|/images/fitbitApril2016.jpg)
 
-As I take routine walks in my neighborhood, I pick up some of the litter I find alond the way.
+As I take routine walks in my neighborhood, I pick up some of the litter I find along the way.
 I also get to go on the weekly trail clearing that is done by the conservation commission of my town.
 I finished reading two books.
 All very modest goals, which is exactly how I wanted them to be.
