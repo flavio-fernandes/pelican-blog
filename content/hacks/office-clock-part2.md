@@ -448,13 +448,13 @@ brightness level of the light sensor.
 
 [Ladyada][ada] has an awesome video on youtube that [talks about ways of working around this limitation][analogread].
 For the fun of it, I connected the photo resistor to an [MCP3002][mcp].
-Thanks to [awesome resources][mcpblog], it was not hard to write a little C++ class to abstract
+Thanks to [great resources][mcpblog], it was not hard to write a little C++ class to abstract
 the reading of the 10-bit value from that chip. While I'm aware that there are already other implementations
 for doing this (see [wiringPi MCP3002][wiringpiMcp]),
 I opted for a C++ implementation that did not require the use of [hardware SPI][hardwareSpi] pins.
 Aside from it being a lot of fun to write, of course. :)
 The result of that was the creation of the [mcp300x repo][mcpcode], which is small enough to make me go ahead
-and simply duplicate it under the oclock repo as well.
+and simply duplicate it under the oclock codebase as well.
 That is under the [mcp300x directory][mcp300xdir] and to be fair, I needed to add an extra knob for using it in the
 oclock context.
 Specifically, I wanted a way of coordinating among all the threads of the program that use the GPIOs.
