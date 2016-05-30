@@ -19,9 +19,9 @@ CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 
 # Links
-LINKS =  (('Delicious Links', 'http://delicious.com/gute'),
-          ('Red Hat', 'http://redhat.com/'),
-          ('Open Day Light', 'http://www.opendaylight.org/'))
+LINKS =  (('Open vSwitch', 'http://openvswitch.org/'),
+          ('OpenStack OVN', 'http://docs.openstack.org/developer/networking-ovn/'),
+          ('Kyle Mestery', 'http://www.siliconloons.com/'))
 
 # Social widget
 SOCIAL = (('Twitter', 'http://twitter.com/flaviof321'),
